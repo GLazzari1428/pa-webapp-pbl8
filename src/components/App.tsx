@@ -1,0 +1,84 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { BookOpen } from "lucide-react";
+import { Onboarding } from "./Onboarding";
+import { CaseList } from "./CaseList";
+import { Wizard } from "./wizard/Wizard";
+import { hasSeenOnboarding, loadCases, markOnboardingSeen, saveCases } from "@/lib/storage";
+import type { FrameworkCase } from "@/lib/engine/types";
+
+type View = { kind: "loading" } | { kind: "onboarding" } | { kind: "list" } | { kind: "case"; id: string };
+
+export function App() {
+  const [view, setView] = useState<View>({ kind: "loading" });
+  const [cases, setCases] = useState<FrameworkCase[]>([]);
+  const [seen, setSeen] = useState(false);
+
+  // localStorage só existe no navegador: carrega após montar.
+  useEffect(() => {
+    const s = hasSeenOnboarding();
+    /* eslint-disable react-hooks/set-state-in-effect */
+    setCases(loadCases());
+    setSeen(s);
+    setView(s ? { kind: "list" } : { kind: "onboarding" });
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, []);
+
+  const persist = (next: FrameworkCase[]) => {
+    setCases(next);
+    saveCases(next);
+  };
+
+  const updateCase = (id: string, fn: (c: FrameworkCase) => FrameworkCase) => {
+    persist(cases.map((c) => (c.id === id ? { ...fn(c), updatedAt: new Date().toISOString() } : c)));
+  };
+
+  const active = view.kind === "case" ? cases.find((c) => c.id === view.id) : undefined;
+
+  return (
+    <div className="flex min-h-full flex-col">
+      <header className="border-b bg-card print:hidden">
+        <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-3">
+          <button
+            type="button"
+            className="text-left text-base font-semibold hover:underline focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 rounded"
+            onClick={() => seen && setView({ kind: "list" })}
+            disabled={!seen}
+          >
+            Framework de decisão pós-MVP de iniciativas de IA
+          </button>
+          <button
+            type="button"
+            onClick={() => setView({ kind: "onboarding" })}
+            className="inline-flex items-center gap-1.5 rounded text-sm font-medium text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            <BookOpen className="size-4" aria-hidden="true" />
+            Ver tutorial de novo
+          </button>
+        </div>
+      </header>
+      <main id="conteudo" className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
+        {view.kind === "loading" && <p aria-live="polite">Carregando…</p>}
+        {view.kind === "onboarding" && (
+          <Onboarding
+            seenBefore={seen}
+            onDone={() => {
+              markOnboardingSeen();
+              setSeen(true);
+              setView({ kind: "list" });
+            }}
+          />
+        )}
+        {view.kind === "list" && <CaseList cases={cases} onChange={persist} onOpen={(id) => setView({ kind: "case", id })} />}
+        {view.kind === "case" && active && (
+          <Wizard c={active} update={(fn) => updateCase(active.id, fn)} onClose={() => setView({ kind: "list" })} />
+        )}
+        {view.kind === "case" && !active && <p>Caso não encontrado.</p>}
+      </main>
+      <footer className="border-t py-3 text-center text-xs text-muted-foreground print:hidden">
+        Grupo 14 · Pesquisa Aplicada · PUCPR — dados salvos apenas neste navegador.
+      </footer>
+    </div>
+  );
+}
