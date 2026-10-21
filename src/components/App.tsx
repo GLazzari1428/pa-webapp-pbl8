@@ -39,11 +39,11 @@ export function App() {
 
   return (
     <div className="flex min-h-full flex-col">
-      <header className="border-b bg-card print:hidden">
+      <header className="bg-background shadow-border print:hidden">
         <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-3">
           <button
             type="button"
-            className="text-left text-base font-semibold hover:underline focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 rounded"
+            className="text-left text-base font-semibold tracking-tight hover:underline focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 rounded"
             onClick={() => setView({ kind: "list" })}
           >
             Framework de decisão pós-MVP de iniciativas de IA
@@ -52,7 +52,7 @@ export function App() {
             <button
               type="button"
               onClick={() => setTutorialOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded text-sm font-medium text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+              className="inline-flex items-center gap-1.5 rounded px-2 py-1 text-sm font-medium text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
             >
               <BookOpen className="size-4" aria-hidden="true" suppressHydrationWarning />
               Mostrar Tutorial

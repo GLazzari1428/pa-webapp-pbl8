@@ -130,3 +130,35 @@ Mudanças pedidas pelo orientador depois da primeira entrega. O fluxo do formul�
 2. **Tutorial reescrito** (`src/components/Onboarding.tsx`). Cada conceito virou um cartão com ícone do `lucide-react`, uma definição curta e, separado, um bloco destacado "Exemplo:" com o Caso A. As quatro dimensões e as três recomendações aparecem como selos coloridos, e as cinco etapas do formulário como cartões numerados. O conteúdo técnico segue `pbl6/04_Tutorial.md`.
 3. **Casos como tela principal, tutorial em modal.** O app abre sempre na lista de casos (`App.tsx`). O tutorial é um `Dialog` (`src/components/ui/dialog.tsx`, sobre Base UI) com rolagem interna, indicador de progresso e botões Anterior/Próximo. Na primeira visita ele abre sozinho; pode ser fechado a qualquer momento (fechar marca como visto). O botão "Mostrar Tutorial" no cabeçalho o reabre em qualquer tela, inclusive dentro do wizard, sem perder o caso aberto.
 4. **Tema claro/escuro.** Botão sol/lua no cabeçalho (`src/components/ThemeToggle.tsx`) alterna a classe `dark` em `<html>`. A escolha fica em `localStorage`; sem escolha salva, vale `prefers-color-scheme`. Um script em `layout.tsx` aplica o tema antes da primeira pintura. As cores fixas de alertas, selos e gráfico ganharam variantes escuras (o gráfico usa os tokens do tema). Casos, tutorial e wizard (incluindo Resultado) foram conferidos em captura de tela nos dois temas; o relatório de impressão continua em preto e branco.
+
+---
+
+## Versão 3: sistema de design
+
+Aplicação do `DESIGN.md` (estilo Vercel/Geist) ao tutorial (`Onboarding.tsx`), ao cabeçalho (`App.tsx`) e aos componentes base. Fluxo do formulário e motor de cálculo não foram tocados; os 21 testes continuam passando.
+
+### Autodiagnóstico dos 10 sinais de "AI design slop" (tutorial + cabeçalho)
+
+| # | Sinal | Antes (V2) | Depois (V3) |
+|---|-------|-----------|-------------|
+| 1 | Gradiente tech genérico | Não | Não |
+| 2 | Destaque índigo/violeta/azul por padrão | Sim (bloco "Exemplo" azul-céu, selo violeta, link do cabeçalho) | Não |
+| 3 | Grade de cards repetidos | Sim (8 cartões em 2 colunas, 3 cartões de saída, 5 cartões de etapa) | Não |
+| 4 | Tarja lateral colorida | Sim (`border-l-4` azul no "Exemplo") | Não |
+| 5 | Blur/glassmorphism | Não | Não |
+| 6 | Número gigante decorativo | Não | Não |
+| 7 | Ícone repetido acima/ao lado de cada título | Sim (ícone em quadrado em todo conceito, círculos numerados) | Não |
+| 8 | Tudo centralizado | Parcial (cartões de saída centralizados) | Não |
+| 9 | Fonte padrão do sistema | Sim (`system-ui`) | Não (Geist via `next/font`) |
+| 10 | Superfície errada (tela de explicar com cara de marketing) | Parcial (selos e cartões coloridos na página 1) | Não |
+
+**Score: antes 7 de 10 (5 claros + 2 parciais); depois 0 de 10 no tutorial e no cabeçalho.**
+
+Ressalvas honestas: (a) o score novo é autoavaliação, sem revisão do orientador nem teste com usuário; (b) o diagnóstico cobriu o tutorial e o cabeçalho, as telas do wizard só herdaram fonte, cartão e diálogo atualizados, sem revisão sinal a sinal (o Resultado continua com cor funcional, como pede o `DESIGN.md`); (c) o diálogo do tutorial mantém o fundo escurecido (`bg-black/50`) e uma camada suave de sombra para se separar da página, o que considero profundidade funcional, não decoração.
+
+### O que mudou
+
+1. **Fonte Geist** (pacote `geist`, self-hosted): `GeistSans`/`GeistMono` aplicados em `<html>` no `layout.tsx`; `--font-sans` e `--font-mono` em `globals.css` apontam para as variáveis do Geist. Títulos com `letter-spacing` levemente negativo.
+2. **Shadow-as-border**: utilitários `shadow-border` (`0 0 0 1px var(--border)`) e `shadow-border-raised` (mais `0 2px 2px rgba(0,0,0,0.04)`) em `globals.css`. Usados no `Card` (no lugar do `ring`), no `Dialog` (no lugar de `border` + `shadow-lg`), no cabeçalho, no `ThemeToggle` e nos separadores do tutorial.
+3. **Tutorial**: sem ícones, sem selos coloridos de dimensões e de Escalar/Pivotar/Descontinuar, sem grades de cartões. Cada conceito é título (peso 600) + parágrafo (400). O exemplo é uma citação tipográfica: recuo, texto em `muted-foreground` e rótulo "EXEMPLO" pequeno em peso 500, sem caixa nem borda. A página 1 virou três parágrafos curtos, o exemplo e a ressalva. As cinco etapas viraram lista numerada simples.
+4. **Cabeçalho**: "Mostrar Tutorial" deixou de ser link sublinhado e passou a botão discreto com os mesmos tokens do `ThemeToggle` (texto `foreground`, hover `muted`).

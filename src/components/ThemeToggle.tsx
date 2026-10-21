@@ -32,7 +32,7 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-label={label}
       title={label}
-      className="inline-flex size-8 items-center justify-center rounded-md border text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+      className="inline-flex size-8 items-center justify-center rounded-md text-foreground shadow-border hover:bg-muted focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
     >
       {dark ? (
         <Sun className="size-4" aria-hidden="true" suppressHydrationWarning />

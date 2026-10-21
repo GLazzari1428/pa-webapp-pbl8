@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
@@ -11,7 +13,7 @@ const THEME_SCRIPT = `try{var t=localStorage.getItem("pbl8.framework.theme");if(
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className="h-full antialiased" suppressHydrationWarning>
+    <html lang="pt-BR" className={`${GeistSans.variable} ${GeistMono.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
         {/* Aplica o tema salvo (ou o do sistema) antes da primeira pintura, para não piscar. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
