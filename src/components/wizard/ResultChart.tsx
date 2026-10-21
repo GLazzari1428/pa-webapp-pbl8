@@ -50,7 +50,7 @@ export function ResultChart({ ev, t }: { ev: CaseEvaluation; t: Thresholds }) {
     .map((c, i) => ({ i: i + 1, score: c.score }));
 
   const metrics = [
-    { key: "dim" as const, label: "Pontuação S", value: fmt(ev.score), sub: "por dimensão" },
+    { key: "dim" as const, label: "Pontuação geral", value: fmt(ev.score), sub: "por dimensão" },
     {
       key: "sens" as const,
       label: "Intervalo na sensibilidade",
@@ -117,7 +117,7 @@ export function ResultChart({ ev, t }: { ev: CaseEvaluation; t: Thresholds }) {
                 </ResponsiveContainer>
               </div>
               <figcaption className="mt-2 text-sm text-muted-foreground">
-                Nota de cada dimensão (0 a 1) com as linhas dos limiares. A pontuação S é a média ponderada dessas notas.
+                Nota de cada dimensão (0 a 1) com as linhas dos limiares. A pontuação geral é a média ponderada dessas notas.
               </figcaption>
             </figure>
             <table className="sr-only">
@@ -156,18 +156,18 @@ export function ResultChart({ ev, t }: { ev: CaseEvaluation; t: Thresholds }) {
                     <ReferenceArea y1={t.scale} y2={1} fill="#10b981" fillOpacity={0.08} />
                     <ReferenceArea y1={t.lower} y2={t.scale} fill="#f59e0b" fillOpacity={0.08} />
                     <ReferenceArea y1={0} y2={t.lower} fill="#ef4444" fillOpacity={0.06} />
-                    <XAxis dataKey="i" tickLine={false} axisLine={false} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} label={{ value: "combinações, da menor para a maior S", position: "insideBottom", offset: -2, fill: "var(--muted-foreground)", fontSize: 11 }} height={36} />
+                    <XAxis dataKey="i" tickLine={false} axisLine={false} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} label={{ value: "combinações, da menor para a maior pontuação geral", position: "insideBottom", offset: -2, fill: "var(--muted-foreground)", fontSize: 11 }} height={36} />
                     <YAxis domain={[0, 1]} ticks={[0, 0.2, 0.4, 0.6, 0.8, 1]} tickLine={false} axisLine={false} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} />
-                    <ReferenceLine y={ev.score} stroke="var(--foreground)" strokeDasharray="2 3" label={{ value: `S atual ${fmt(ev.score)}`, position: "insideBottomLeft", fill: "var(--foreground)", fontSize: 11 }} />
+                    <ReferenceLine y={ev.score} stroke="var(--foreground)" strokeDasharray="2 3" label={{ value: `Pontuação atual ${fmt(ev.score)}`, position: "insideBottomLeft", fill: "var(--foreground)", fontSize: 11 }} />
                     <ReferenceLine y={t.scale} stroke="var(--chart-scale)" strokeDasharray="4 4" />
                     <ReferenceLine y={t.lower} stroke="var(--chart-pivot)" strokeDasharray="4 4" />
-                    <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v) => [fmt(Number(v)), "S"]} labelFormatter={(l) => `Combinação ${l}`} />
+                    <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v) => [fmt(Number(v)), "Pontuação geral"]} labelFormatter={(l) => `Combinação ${l}`} />
                     <Area isAnimationActive={false} type="monotone" dataKey="score" stroke={BAR_COLOR} strokeWidth={2} fill="url(#sensFill)" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
               <figcaption className="mt-2 text-sm text-muted-foreground">
-                As {sensData.length} pontuações S obtidas variando cada peso de dimensão em ±{fmt(t.variation * 100, 0)}%. Faixas:
+                As {sensData.length} pontuações gerais obtidas variando cada peso de dimensão {fmt(t.variation * 100, 0)}% para menos e para mais. Cores das faixas:
                 verde = Escalar, âmbar = Pivotar, vermelho = Descontinuar. {ev.sensitivity.label}
               </figcaption>
             </figure>

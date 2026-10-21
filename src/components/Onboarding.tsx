@@ -41,8 +41,9 @@ const PAGES: { title: string; body: ReactNode }[] = [
           <strong className="font-semibold">Descontinuar</strong>.
         </p>
         <p>
-          A recomendação vem da pontuação S, de 0 a 1, que combina indicadores de quatro dimensões: qualidade técnica,
-          eficiência econômica, valor operacional e adoção, e prontidão, risco e governança.
+          A recomendação vem de uma pontuação geral calculada pelo framework, que vai de 0 a 1. Essa pontuação combina
+          indicadores de quatro dimensões: qualidade técnica, eficiência econômica, valor operacional e adoção, e
+          prontidão, risco e governança.
         </p>
         <p>
           O trabalho tem duas fases. Na <strong className="font-semibold">fase 1</strong>, você reúne os dados com as
@@ -73,18 +74,19 @@ const PAGES: { title: string; body: ReactNode }[] = [
         </Concept>
         <Concept
           title="Pesos das dimensões"
-          example="qualidade técnica 0,30; eficiência econômica 0,25; valor operacional e adoção 0,25; prontidão, risco e governança 0,20."
+          example="três decisores dão, em média, 30 pontos à qualidade técnica. O peso da qualidade técnica fica 0,30. As outras ficam com 0,25, 0,25 e 0,20."
         >
-          A importância de cada dimensão na decisão. Cada decisor (negócio, TI, segurança ou jurídico) distribui 100
-          pontos entre as quatro; a média de cada uma dividida por 100 é o peso. Sem consenso, 0,25 para todas. Defina
-          antes de ver os resultados.
+          O peso diz quanto cada dimensão importa na decisão. Cada decisor (negócio, TI, segurança ou jurídico) distribui
+          100 pontos entre as quatro dimensões. O peso de uma dimensão é a média dos pontos que ela recebeu, dividida por
+          100. Sem consenso, cada dimensão fica com peso 0,25. Defina os pesos antes de ver os resultados.
         </Concept>
         <Concept
           title="Limiares"
-          example="S ≥ 0,70: Escalar; 0,40 ≤ S < 0,70: Pivotar; S < 0,40: Descontinuar. Distância de fronteira: 0,05."
+          example="com os valores padrão, um projeto com pontuação geral 0,82 recebe Escalar. Um com 0,55 recebe Pivotar. Um com 0,30 recebe Descontinuar."
         >
-          Os cortes que convertem a pontuação S em recomendação. Abaixo do limiar inferior, Descontinuar, salvo se a perda
-          estiver concentrada numa dimensão corrigível. A distância de fronteira marca resultados perto de um limiar.
+          Os limiares são a política de decisão do framework. Uma linha separa parar (Descontinuar) de ajustar (Pivotar).
+          Outra linha separa ajustar (Pivotar) de escalar (Escalar). O framework já vem com valores padrão sensatos, os
+          mesmos usados nos exemplos do artigo. Na maioria dos casos você não precisa alterá-los.
         </Concept>
       </>
     ),
@@ -93,32 +95,34 @@ const PAGES: { title: string; body: ReactNode }[] = [
     title: "Fase 1: indicadores e evidências",
     body: (
       <>
-        <Concept title="Indicador" example="% de atendimentos refeitos por erro da IA, na dimensão de qualidade técnica.">
-          Uma medida numérica do efeito do MVP. De um a três por dimensão (até 12 no total), escolhidos a partir da
-          hipótese e só entre os que a organização já consegue medir.
+        <Concept title="Indicador" example="percentual de atendimentos refeitos por erro da IA, na dimensão de qualidade técnica.">
+          Um indicador é uma medida numérica do efeito do MVP. Escolha de um a três indicadores por dimensão, até 12
+          indicadores no total. Escolha indicadores ligados à hipótese de valor e que a organização já consegue medir.
         </Concept>
-        <Concept title="Direção" example="atendimentos refeitos: menor é melhor.">
-          Se o resultado melhora quando o valor aumenta ou quando diminui.
+        <Concept title="Direção" example="no indicador de atendimentos refeitos, menor é melhor. No de respostas corretas, maior é melhor.">
+          A direção diz se o indicador melhora quando o valor aumenta ou quando o valor diminui.
         </Concept>
-        <Concept title="Linha de base, meta e valor observado" example="base 25%, meta 10%, observado 11% nos três meses do piloto.">
-          A base é o valor antes do MVP; a meta, o valor que se quer atingir; o observado, o medido no piloto pelo mesmo
-          método da base.
+        <Concept title="Linha de base, meta e valor observado" example="atendimentos refeitos tinham linha de base de 25%, meta de 10% e valor observado de 11% nos três meses do piloto.">
+          A linha de base é o valor do indicador antes do MVP. A meta é o valor que se quer atingir. O valor observado é o
+          valor medido no piloto, pelo mesmo método usado na linha de base.
         </Concept>
-        <Concept title="Unidade" example="15 e 15% são aceitos como o mesmo percentual.">
-          A unidade da medida: %, R$, minutos, horas, dias, pontos e outras.
+        <Concept title="Unidade" example="o tempo de atendimento é medido em minutos. Num indicador em percentual, digitar 15 ou 15% dá o mesmo valor.">
+          A unidade diz em que medida o indicador é expresso: percentual, reais, minutos, horas, dias, pontos e outras.
         </Concept>
-        <Concept title="Tipo de KPI" example="% de atendentes que usam a IA é antecedente; tempo de atendimento é de resultado.">
-          Antecedente é um sinal inicial de que o efeito virá; de resultado é o próprio efeito buscado.
+        <Concept title="Tipo de KPI" example="o percentual de atendentes que usam a IA é um indicador antecedente. O tempo de atendimento é um indicador de resultado.">
+          Um indicador antecedente é um sinal inicial de que o efeito pode vir. Um indicador de resultado mede o próprio
+          efeito buscado. Isso importa porque só indicadores de resultado sustentam uma recomendação de Escalar.
         </Concept>
-        <Concept title="Peso na dimensão" example="respostas corretas 0,60 e atendimentos refeitos 0,40.">
-          Quanto cada indicador pesa dentro da sua dimensão. Os mesmos 100 pontos são distribuídos entre os indicadores da
-          dimensão.
+        <Concept title="Peso na dimensão" example="na qualidade técnica, respostas corretas tem peso 0,60 e atendimentos refeitos tem peso 0,40.">
+          O peso na dimensão diz quanto cada indicador importa dentro da sua dimensão. Os decisores distribuem 100 pontos
+          entre os indicadores de uma mesma dimensão, como fazem com as dimensões.
         </Concept>
-        <Concept title="Origem, período e responsável" example="sistema de chamados, meses 1 a 3, supervisor do atendimento.">
-          De onde veio o número, que intervalo ele cobre e quem fez a medição.
+        <Concept title="Origem, período e responsável" example="o número veio do sistema de chamados, cobre os meses 1 a 3 do piloto e foi medido pelo supervisor do atendimento.">
+          A evidência de cada indicador registra de onde veio o número, que período ele cobre e quem fez a medição.
         </Concept>
-        <Concept title="Dado ausente" example="sem o valor observado de custo, o indicador sai do cálculo e os pesos da dimensão são renormalizados.">
-          Deixe o valor observado vazio. O indicador sai do cálculo; ausência nunca vira nota zero.
+        <Concept title="Dado ausente" example="sem o valor observado de custo por atendimento, esse indicador sai do cálculo. Os pesos dos outros indicadores da dimensão são reajustados para somar 1.">
+          Quando um indicador não tem medição, deixe o valor observado vazio. O indicador sai do cálculo. Um dado ausente
+          nunca vira nota zero.
         </Concept>
       </>
     ),
@@ -131,18 +135,19 @@ const PAGES: { title: string; body: ReactNode }[] = [
           title="Barreira"
           example="segurança verificada com a TI: só fica Atendida com o relatório de testes anexado como evidência; sem verificação, Não avaliada."
         >
-          Um requisito mínimo que nenhuma nota compensa: confiabilidade (com a operação), segurança (com a TI), privacidade
-          (com o encarregado de dados) e conformidade legal e ética (com o jurídico).
+          Uma barreira é um requisito mínimo que nenhuma nota alta compensa. As quatro barreiras são confiabilidade
+          (verificada com a operação), segurança (com a TI), privacidade (com o encarregado de dados) e conformidade legal e
+          ética (com o jurídico).
         </Concept>
         <section>
           <h3 className="text-base font-semibold tracking-tight">As cinco etapas do formulário</h3>
           <ol className="mt-2 space-y-1.5 text-sm">
             {[
               ["Configuração", "caso, hipótese, pesos e limiares"],
-              ["Indicadores", "até 12, com evidência"],
-              ["Barreiras", "estado, evidência e plano"],
-              ["Resultado", "S, recomendação, gráfico e sensibilidade"],
-              ["Decisão", "registro humano, congelado após salvo"],
+              ["Indicadores", "até 12 indicadores, cada um com evidência"],
+              ["Barreiras", "estado, evidência e plano de cada barreira"],
+              ["Resultado", "pontuação geral, recomendação, gráfico e sensibilidade"],
+              ["Decisão", "registro da decisão humana, que não muda depois de salvo"],
             ].map(([t, d], i) => (
               <li key={t} className="flex gap-3">
                 <span className="w-4 shrink-0 font-mono text-xs leading-5 text-muted-foreground">{i + 1}</span>

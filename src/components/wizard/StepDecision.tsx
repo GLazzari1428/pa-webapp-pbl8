@@ -39,7 +39,7 @@ export function StepDecision({ c, update, ev }: StepProps) {
   return (
     <div className="space-y-8">
       <div className="rounded-md bg-muted/40 p-4 shadow-border text-sm">
-        Recomendação calculada agora: <RecBadge rec={rec} pending={ev.outcome.pending} /> (S = {fmt(ev.score)}). {ev.explanation}
+        Recomendação calculada agora: <RecBadge rec={rec} pending={ev.outcome.pending} /> (pontuação geral {fmt(ev.score)}). {ev.explanation}
       </div>
 
       {frozen ? (
@@ -102,7 +102,7 @@ export function StepDecision({ c, update, ev }: StepProps) {
               <li key={d.id} className="rounded-md bg-card p-3 shadow-border text-sm">
                 <p>
                   <strong>v{d.version}</strong> · salva em {new Date(d.savedAt).toLocaleString("pt-BR")} · decisão{" "}
-                  <RecBadge rec={d.decision} /> · recomendação na época: {d.snapshot.recommendation ?? "pendente"} (S = {fmt(d.snapshot.score)})
+                  <RecBadge rec={d.decision} /> · recomendação na época: {d.snapshot.recommendation ?? "pendente"} (pontuação geral {fmt(d.snapshot.score)})
                 </p>
                 {d.reopenReason && <p className="mt-1 text-muted-foreground">Motivo da reabertura: {d.reopenReason}</p>}
               </li>

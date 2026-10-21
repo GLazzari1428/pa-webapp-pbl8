@@ -194,3 +194,35 @@ Extensão do `DESIGN.md` para Casos, as 5 etapas do wizard e os alertas de pend�
 **Score: antes 2 de 10 no app inteiro; depois 0 claros + 1 parcial.**
 
 Ressalvas honestas: (a) é autoavaliação, sem revisão do orientador nem teste com usuário; (b) **não houve teste visual no navegador** nesta rodada, a verificação foi por `grep`, build, testes e lint, então contraste real no tema escuro (texto escuro sobre `#34d399`/`#fbbf24`) e o contorno de 1,5px da etapa ativa precisam ser conferidos na tela; (c) `PrintReport.tsx` mantém `border border-black` nas tabelas de propósito: é só para impressão, onde sombra não é impressa de forma confiável; (d) os componentes base `ui/input`, `ui/textarea` e `ui/button` mantêm borda CSS (`border-input`) e `rounded-lg`, já que campo de formulário precisa de borda visível e de anel de foco; não foram mexidos.
+
+## Versão 5: escrita acessível e limiares escondidos por padrão
+
+Pedido em `CHANGES_V5.md`. Nenhuma regra de validação, cálculo, nome de campo interno ou valor padrão mudou.
+
+### Parte A: textos reescritos num único padrão
+
+Modelo: o cartão "Hipótese de valor" (definição curta e simples, seguida de um exemplo concreto). Regras aplicadas: sem a letra "S" nem símbolos matemáticos (≥, ≤, <, >, ÷, ±) para o usuário; toda frase faz sentido sozinha; toda definição tem exemplo; frases com ponto e vírgula foram quebradas.
+
+Onde: todos os cartões do tutorial (`Onboarding.tsx`), todas as entradas de `help.ts` que tinham problema, e os textos de interface que mostravam "S" em `StepConfig`, `StepResult`, `ResultChart`, `StepBarriers`, `StepDecision`, `PrintReport`, `CaseList` e nas frases de explicação geradas em `engine.ts` (`explain`, mensagem de barreira e de perda corrigível; só o texto, a lógica é a mesma).
+
+Antes e depois:
+
+- Tutorial, "Indicador". Antes: "De um a três por dimensão (até 12 no total)". Depois: "Escolha de um a três indicadores por dimensão, até 12 indicadores no total."
+- Tutorial, "Tipo de KPI". Antes: "Antecedente é um sinal inicial de que o efeito virá; de resultado é o próprio efeito buscado." Depois: "Um indicador antecedente é um sinal inicial de que o efeito pode vir. Um indicador de resultado mede o próprio efeito buscado. Isso importa porque só indicadores de resultado sustentam uma recomendação de Escalar."
+- Tutorial, "Limiares". Antes: "Os cortes que convertem a pontuação S em recomendação…" com exemplo "S ≥ 0,70: Escalar; 0,40 ≤ S < 0,70: Pivotar…". Depois: "Os limiares são a política de decisão do framework. Uma linha separa parar (Descontinuar) de ajustar (Pivotar). Outra linha separa ajustar (Pivotar) de escalar (Escalar)…", com exemplo "um projeto com pontuação geral 0,82 recebe Escalar. Um com 0,55 recebe Pivotar. Um com 0,30 recebe Descontinuar."
+- `help.ts`, `lower`. Antes: "Abaixo deste valor de S a faixa é Descontinuar (salvo perda corrigível). Padrão 0,40." Depois: "Linha que separa parar de ajustar. Se a pontuação geral calculada pelo framework ficar abaixo deste valor, a recomendação é Descontinuar, salvo se a perda for corrigível. O padrão do artigo é 0,40. Ex.: um projeto com pontuação geral 0,35 recebe Descontinuar."
+- `help.ts`, `weights`. Antes: "…a média ÷ 100 vira o peso." Depois: "…Se a média da qualidade técnica for 30 pontos, o peso dela é 0,30."
+- Tela de resultado. Antes: "Pontuação total S" e "Limiares: Pivotar ≥ 0,40; Escalar ≥ 0,70". Depois: "Pontuação geral" e "Limiares: Pivotar a partir de 0,40. Escalar a partir de 0,70."
+
+`border` e `variation` agora dizem explicitamente que são parâmetros avançados e que a maioria dos casos não precisa mudá-los.
+
+### Parte B: limiares em "Configurações avançadas"
+
+Em `StepConfig.tsx`, os quatro campos (`lower`, `scale`, `border`, `variation`) ficam dentro de um `Collapsible` do shadcn/ui (instalado com `npx shadcn@latest add collapsible`), fechado por padrão. Fechado, mostra uma linha dizendo que o framework usa os limiares padrão do artigo e que a maioria dos casos não precisa mudar isso, com o link "Ver e editar limiares". Aberto, os campos são os mesmos de antes. Dois cuidados extras: se os valores foram alterados, a linha diz isso em vez de afirmar que são os padrões; e se algum limiar tem erro de validação ao abrir a etapa, a seção já abre expandida para o erro não ficar escondido.
+
+### Limitações honestas
+
+- A revisão foi feita lendo o código; não abri o app no navegador, então o Collapsible não foi testado visualmente (só build, testes e lint).
+- Textos curtos de rótulo (nomes de campo, opções de select) e as mensagens de validação de `engine.ts` não foram reescritos uma a uma contra a regra 3 (exemplo para toda definição); só removi o símbolo "≥" de uma delas.
+- Os dados de exemplo (`src/lib/data/examples.ts`) ainda usam "÷" nas descrições de origem da evidência, porque são conteúdo dos casos do artigo e não texto de interface.
+- Comentários de código ainda usam "S" e notação matemática; não aparecem para o usuário.

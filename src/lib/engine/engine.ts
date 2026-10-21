@@ -87,7 +87,7 @@ export function validateIndicators(indicators: Indicator[]): Issue[] {
     if (ind.unit === "outra" && !ind.customUnit?.trim()) add("customUnit", `${label}: descreva a unidade.`);
     if (ind.baseline === null) add("baseline", `${label}: informe a linha de base.`);
     if (ind.target === null) add("target", `${label}: informe a meta.`);
-    if (ind.weight === null || ind.weight < 0) add("weight", `${label}: informe o peso na dimensão (número ≥ 0).`);
+    if (ind.weight === null || ind.weight < 0) add("weight", `${label}: informe o peso na dimensão (zero ou mais).`);
     if (ind.baseline !== null && ind.target !== null) {
       if (ind.direction === "maior" && ind.target < ind.baseline - EPS)
         add("target", `${label}: com "melhor quando maior", a meta deve ser maior ou igual à linha de base.`);
@@ -379,7 +379,7 @@ export function barrierConstraints(barriers: Barrier[]): Constraint[] {
       out.push({
         kind: "barreira_veto",
         effect: "veto",
-        message: `Barreira "${name}" (${why}) impõe Descontinuar, qualquer que seja S.`,
+        message: `Barreira "${name}" (${why}) impõe Descontinuar, qualquer que seja a pontuação geral.`,
         shortLabel: `barreira "${name}" (${why})`,
       });
     } else if (eff === "em_tratamento") {
@@ -458,7 +458,7 @@ export function decide(input: DecisionInputs): DecisionOutcome {
   if (!input.inputsValid) return result(null, "Revisar entradas dos indicadores ou das barreiras.", []);
   const pend = constraints.filter((c) => c.effect === "pendente");
   if (pend.length > 0) return result(null, "Aguardando plano aprovado.", pend);
-  if (band === null) return result(null, "Aguardando julgamento sobre perda corrigível (S abaixo do limiar inferior).", []);
+  if (band === null) return result(null, "Aguardando julgamento sobre perda corrigível (pontuação geral abaixo do limiar inferior).", []);
   if (band === "Escalar") {
     const caps = constraints.filter((c) => c.effect === "teto");
     if (caps.length > 0) return result("Pivotar", null, caps);
@@ -607,11 +607,11 @@ export function evaluateCase(c: Pick<FrameworkCase, "config" | "indicators" | "b
 export function explain(score: number, o: DecisionOutcome): string {
   const s = fmt(score);
   if (o.pending) return `Recomendação não emitida: ${o.pending}`;
-  if (o.band === null) return `S = ${s}. Recomendação: ${o.recommendation}.`;
-  if (o.recommendation === o.band) return `S = ${s} está na faixa ${o.band}, e nenhuma barreira ou restrição alterou a saída. Recomendação: ${o.recommendation}.`;
+  if (o.band === null) return `Pontuação geral ${s}. Recomendação: ${o.recommendation}.`;
+  if (o.recommendation === o.band) return `A pontuação geral ${s} está na faixa ${o.band}, e nenhuma barreira ou restrição alterou a saída. Recomendação: ${o.recommendation}.`;
   const by = o.binding.map((c) => c.shortLabel).join("; ");
   const verb = o.recommendation === "Descontinuar" ? "substituída por Descontinuar" : `limitada a ${o.recommendation}`;
-  return `Faixa ${o.band} (S = ${s}) ${verb} por: ${by}.`;
+  return `Faixa ${o.band} (pontuação geral ${s}) ${verb} por: ${by}.`;
 }
 
 /* ------------------------------------------------------------------ */

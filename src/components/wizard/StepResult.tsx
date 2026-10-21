@@ -57,12 +57,12 @@ export function StepResult({ c, update, ev }: StepProps) {
           Recomendação
         </h2>
         <div className="rounded-md bg-card p-4 shadow-border">
-          <p className="text-sm text-muted-foreground">Pontuação total S</p>
+          <p className="text-sm text-muted-foreground">Pontuação geral</p>
           <p className="text-3xl font-semibold tabular-nums">{fmt(ev.score)}</p>
           <p className="text-xs text-muted-foreground">
-            Limiares: Pivotar ≥ {fmt(t.lower, 2)}; Escalar ≥ {fmt(t.scale, 2)}
+            Limiares: Pivotar a partir de {fmt(t.lower, 2)}. Escalar a partir de {fmt(t.scale, 2)}.
           </p>
-          {ev.borderline && <p className="mt-1 text-sm font-medium text-pivotar">Zona de fronteira: S está a até {fmt(t.border, 2)} de um limiar.</p>}
+          {ev.borderline && <p className="mt-1 text-sm font-medium text-pivotar">Zona de fronteira: a pontuação geral está a até {fmt(t.border, 2)} de um limiar.</p>}
         </div>
         <div className="rounded-md bg-card p-4 shadow-border">
           <p className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -71,7 +71,7 @@ export function StepResult({ c, update, ev }: StepProps) {
           <p className="mt-1">
             <RecBadge rec={o.band} pending={o.band ? null : "Aguardando julgamento"} large />
           </p>
-          <p className="mt-1 text-xs text-muted-foreground">O que S indicaria sozinho.</p>
+          <p className="mt-1 text-xs text-muted-foreground">O que a pontuação geral indicaria sozinha.</p>
         </div>
         <div className="rounded-md bg-card p-4 shadow-[0_0_0_1.5px_var(--foreground)]">
           <p className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -101,7 +101,7 @@ export function StepResult({ c, update, ev }: StepProps) {
         <fieldset className="grid gap-4 rounded-md p-4 shadow-[0_0_0_1px_var(--chart-pivot)] md:grid-cols-2">
           <legend className="px-1 font-semibold">Julgamento de perda corrigível</legend>
           <p className="text-sm md:col-span-2">
-            S ficou abaixo do limiar inferior ({fmt(t.lower, 2)}). Se os decisores julgam que a perda está concentrada numa
+            A pontuação geral ficou abaixo do limiar inferior ({fmt(t.lower, 2)}). Se os decisores julgam que a perda está concentrada numa
             única dimensão que dá para corrigir, a faixa passa a Pivotar; caso contrário, Descontinuar.
           </p>
           <SelectField
@@ -144,7 +144,7 @@ export function StepResult({ c, update, ev }: StepProps) {
             Resumo da sensibilidade <InfoTip text={HELP.sensitivity} label="Sensibilidade" />
           </h2>
           <p className="mt-2 text-sm">
-            S varia de <strong>{fmt(ev.sensitivity.min)}</strong> a <strong>{fmt(ev.sensitivity.max)}</strong> nas{" "}
+            A pontuação geral varia de <strong>{fmt(ev.sensitivity.min)}</strong> a <strong>{fmt(ev.sensitivity.max)}</strong> nas{" "}
             {ev.sensitivity.combos.length} combinações.
           </p>
           <p className={`mt-1 text-sm font-medium ${ev.sensitivity.stable ? "text-escalar" : "text-pivotar"}`}>{ev.sensitivity.label}</p>

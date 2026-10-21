@@ -18,7 +18,7 @@ export function StepBarriers({ c, update, ev }: StepProps) {
   return (
     <div className="space-y-6">
       <p className="text-sm text-muted-foreground">
-        <strong>Violada</strong> ou <strong>Não avaliada</strong> impõem Descontinuar, qualquer que seja S.{" "}
+        <strong>Violada</strong> ou <strong>Não avaliada</strong> impõem Descontinuar, qualquer que seja a pontuação geral.{" "}
         <strong>Em tratamento</strong> com plano aprovado limita a saída a Pivotar. <strong>Atendida</strong> exige
         evidência registrada; sem ela, a barreira é tratada como Não avaliada.
       </p>

@@ -21,7 +21,7 @@ export function PrintReport({ c, ev }: { c: FrameworkCase; ev: CaseEvaluation })
 
       <h2 className="mt-4 text-lg font-bold">Resultado</h2>
       <p>
-        S = <strong>{fmt(ev.score)}</strong> · Faixa por pontuação: <strong>{ev.outcome.band ?? "aguardando julgamento"}</strong> · Recomendação final:{" "}
+        Pontuação geral: <strong>{fmt(ev.score)}</strong> · Faixa por pontuação: <strong>{ev.outcome.band ?? "aguardando julgamento"}</strong> · Recomendação final:{" "}
         <strong>{ev.outcome.recommendation ?? `pendente (${ev.outcome.pending})`}</strong>
         {ev.borderline ? " · Zona de fronteira" : ""}
       </p>
@@ -32,7 +32,7 @@ export function PrintReport({ c, ev }: { c: FrameworkCase; ev: CaseEvaluation })
         ))}
       </ul>
       <p className="mt-1">
-        Sensibilidade ({ev.sensitivity.combos.length} combinações, ±{fmt(cfg.thresholds.variation * 100, 0)}%): S de {fmt(ev.sensitivity.min)} a{" "}
+        Sensibilidade ({ev.sensitivity.combos.length} combinações, cada peso variando {fmt(cfg.thresholds.variation * 100, 0)}% para menos e para mais): pontuação geral de {fmt(ev.sensitivity.min)} a{" "}
         {fmt(ev.sensitivity.max)}. {ev.sensitivity.label}
       </p>
 

@@ -91,7 +91,7 @@ export function CaseList({
                 <li key={c.id} className="rounded-md bg-card p-4 shadow-border">
                   <h2 className="font-medium">{c.config.name || "Caso sem nome"}</h2>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    S = {c.indicators.length ? ev.score.toLocaleString("pt-BR", { maximumFractionDigits: 3 }) : "n/d"} ·{" "}
+                    Pontuação geral {c.indicators.length ? ev.score.toLocaleString("pt-BR", { maximumFractionDigits: 3 }) : "n/d"} ·{" "}
                     {c.indicators.length} indicador(es) · atualizado em {new Date(c.updatedAt).toLocaleString("pt-BR")}
                   </p>
                   <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">

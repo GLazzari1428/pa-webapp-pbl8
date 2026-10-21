@@ -6,6 +6,7 @@ import { DIMENSIONS, DIMENSION_LABELS, DEFAULT_THRESHOLDS, type CaseConfig, type
 import { fmt } from "@/lib/engine/engine";
 import { UNIT_OPTIONS, unitSuffix } from "@/lib/engine/units";
 import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import type { StepProps } from "./Wizard";
 import { IssueList, issueFor } from "./IssueList";
 
@@ -20,6 +21,10 @@ export function StepConfig({ c, update, ev }: StepProps) {
   const set = (patch: Partial<CaseConfig>) => update((x) => ({ ...x, config: { ...x.config, ...patch } }));
   const err = (f: string) => issueFor(ev.configIssues, "config", f);
   const sumW = DIMENSIONS.reduce((a, d) => a + (cfg.weights[d] || 0), 0);
+  const usingDefaults = (Object.keys(DEFAULT_THRESHOLDS) as (keyof typeof DEFAULT_THRESHOLDS)[]).every(
+    (k) => cfg.thresholds[k] === DEFAULT_THRESHOLDS[k],
+  );
+  const thresholdErrors = ev.configIssues.some((i) => i.targetId === "config" && i.field.startsWith("thresholds."));
   const hypInd = c.indicators.find((i) => i.id === cfg.hypothesis.indicatorId);
 
   return (
@@ -66,8 +71,8 @@ export function StepConfig({ c, update, ev }: StepProps) {
           onChange={(v) => set({ hypothesis: { ...cfg.hypothesis, target: v } })}
         />
         <p className="text-sm text-muted-foreground md:col-span-2">
-          Se a meta da hipótese não for atingida no indicador escolhido, a recomendação nunca será Escalar, mesmo com S
-          na faixa de Escalar. Situação atual: <strong>{ev.hypothesis.message}</strong>
+          Se a meta da hipótese não for atingida no indicador escolhido, a recomendação nunca será Escalar, mesmo com a
+          pontuação geral na faixa de Escalar. Situação atual: <strong>{ev.hypothesis.message}</strong>
         </p>
       </fieldset>
 
@@ -93,16 +98,28 @@ export function StepConfig({ c, update, ev }: StepProps) {
       </fieldset>
 
       <fieldset>
-        <legend className="mb-2 text-lg font-semibold">Limiares e parâmetros de decisão</legend>
-        <div className="grid gap-4 md:grid-cols-4">
-          <NumberField label="Limiar inferior" help={HELP.lower} value={cfg.thresholds.lower} example="Padrão 0,40" error={err("thresholds.lower")} onChange={(v) => set({ thresholds: { ...cfg.thresholds, lower: v ?? NaN } })} />
-          <NumberField label="Limiar de escala" help={HELP.scale} value={cfg.thresholds.scale} example="Padrão 0,70" error={err("thresholds.scale")} onChange={(v) => set({ thresholds: { ...cfg.thresholds, scale: v ?? NaN } })} />
-          <NumberField label="Distância de fronteira" help={HELP.border} value={cfg.thresholds.border} example="Padrão 0,05" error={err("thresholds.border")} onChange={(v) => set({ thresholds: { ...cfg.thresholds, border: v ?? NaN } })} />
-          <NumberField label="Variação dos pesos (sensibilidade)" help={HELP.variation} value={cfg.thresholds.variation} example="Padrão 0,20 = ±20%" error={err("thresholds.variation")} onChange={(v) => set({ thresholds: { ...cfg.thresholds, variation: v ?? NaN } })} />
-        </div>
-        <Button variant="link" className="mt-1 px-0" onClick={() => set({ thresholds: { ...DEFAULT_THRESHOLDS } })}>
-          Restaurar valores padrão
-        </Button>
+        <legend className="mb-2 text-lg font-semibold">Configurações avançadas</legend>
+        <Collapsible defaultOpen={thresholdErrors}>
+          <p className="text-sm text-muted-foreground">
+            {usingDefaults
+              ? "O framework está usando os limiares padrão do artigo. A maioria dos casos não precisa mudar isso."
+              : "Os limiares foram alterados em relação aos valores padrão do artigo."}{" "}
+            <CollapsibleTrigger render={<Button variant="link" className="h-auto px-0 align-baseline" />}>
+              Ver e editar limiares
+            </CollapsibleTrigger>
+          </p>
+          <CollapsibleContent className="mt-4">
+            <div className="grid gap-4 md:grid-cols-4">
+              <NumberField label="Limiar inferior" help={HELP.lower} value={cfg.thresholds.lower} example="Padrão 0,40" error={err("thresholds.lower")} onChange={(v) => set({ thresholds: { ...cfg.thresholds, lower: v ?? NaN } })} />
+              <NumberField label="Limiar de escala" help={HELP.scale} value={cfg.thresholds.scale} example="Padrão 0,70" error={err("thresholds.scale")} onChange={(v) => set({ thresholds: { ...cfg.thresholds, scale: v ?? NaN } })} />
+              <NumberField label="Distância de fronteira" help={HELP.border} value={cfg.thresholds.border} example="Padrão 0,05" error={err("thresholds.border")} onChange={(v) => set({ thresholds: { ...cfg.thresholds, border: v ?? NaN } })} />
+              <NumberField label="Variação dos pesos (sensibilidade)" help={HELP.variation} value={cfg.thresholds.variation} example="Padrão 0,20 (20% para menos e para mais)" error={err("thresholds.variation")} onChange={(v) => set({ thresholds: { ...cfg.thresholds, variation: v ?? NaN } })} />
+            </div>
+            <Button variant="link" className="mt-1 px-0" onClick={() => set({ thresholds: { ...DEFAULT_THRESHOLDS } })}>
+              Restaurar valores padrão
+            </Button>
+          </CollapsibleContent>
+        </Collapsible>
         <p className="text-sm text-muted-foreground">
           Pesos e limiares são parâmetros declarados do instrumento, não valores extraídos da literatura. Fixe-os antes de
           conhecer os resultados.
