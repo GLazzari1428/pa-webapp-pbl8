@@ -30,8 +30,8 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 dev.log
-claude_run.log
-claude_run.err
+claude_run*.log
+claude_run*.err
 
 # env files (can opt-in for committing if needed)
 .env*

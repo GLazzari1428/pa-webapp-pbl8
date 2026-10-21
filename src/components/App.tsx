@@ -54,7 +54,7 @@ export function App() {
               onClick={() => setTutorialOpen(true)}
               className="inline-flex items-center gap-1.5 rounded text-sm font-medium text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
             >
-              <BookOpen className="size-4" aria-hidden="true" />
+              <BookOpen className="size-4" aria-hidden="true" suppressHydrationWarning />
               Mostrar Tutorial
             </button>
             <ThemeToggle />

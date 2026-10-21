@@ -34,7 +34,11 @@ export function ThemeToggle() {
       title={label}
       className="inline-flex size-8 items-center justify-center rounded-md border text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
     >
-      {dark ? <Sun className="size-4" aria-hidden="true" /> : <Moon className="size-4" aria-hidden="true" />}
+      {dark ? (
+        <Sun className="size-4" aria-hidden="true" suppressHydrationWarning />
+      ) : (
+        <Moon className="size-4" aria-hidden="true" suppressHydrationWarning />
+      )}
     </button>
   );
 }
