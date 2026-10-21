@@ -5,7 +5,7 @@ export function IssueList({ issues, title = "O que falta nesta etapa" }: { issue
   return (
     <div role="status" aria-live="polite">
       {issues.length > 0 ? (
-        <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-950">
+        <div className="rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/40 p-3 text-sm text-amber-950 dark:text-amber-100">
           <p className="font-medium">{title}:</p>
           <ul className="mt-1 list-disc pl-5">
             {issues.map((i, k) => (

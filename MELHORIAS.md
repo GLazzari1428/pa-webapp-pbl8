@@ -1,4 +1,4 @@
-# MELHORIAS — PBL8 (DSR Etapa 5)
+# MELHORIAS: PBL8 (DSR Etapa 5)
 
 Este documento registra o que a aplicação web mudou em relação à planilha usada até o PBL7 (`pbl6/Framework_Modelo_Limpo.xlsx`, `pbl6/Framework_Caso_A.xlsx` e os dois casos de `pbl7/filled-files/`). Ele cobre as seis correções de lógica e os quatro elementos de UX aprovados, e indica para cada item o arquivo onde ele foi resolvido. As regras de cálculo validadas no artigo (normalização, agregação, evidência ausente, barreiras, faixas, fronteira e 81 combinações) foram mantidas. Os testes em `tests/engine.test.ts` confirmam que os três casos da Tabela 2 continuam dando os mesmos resultados.
 
@@ -14,7 +14,7 @@ Os dados foram transcritos das planilhas para `src/lib/data/examples.ts`, com um
 
 ---
 
-## Parte A — Correções de lógica
+## Parte A: Correções de lógica
 
 ### 1. A hipótese de valor trava a recomendação Escalar
 
@@ -71,7 +71,7 @@ Os dados foram transcritos das planilhas para `src/lib/data/examples.ts`, com um
 
 ---
 
-## Parte B — Os quatro elementos de UX aprovados
+## Parte B: Os quatro elementos de UX aprovados
 
 ### UX 1. Tooltips "i" com explicação e exemplo
 
@@ -119,3 +119,14 @@ Os dados foram transcritos das planilhas para `src/lib/data/examples.ts`, com um
 - Não houve teste de usabilidade com usuários depois das mudanças. O questionário do PBL7 ainda precisa ser reaplicado.
 - O PDF depende do "Salvar como PDF" do navegador. Não há geração de PDF por biblioteca.
 - Não há deploy real na Vercel (sem credenciais). Foi verificado apenas que o `npm run build` passa.
+
+---
+
+## Versão 2
+
+Mudanças pedidas pelo orientador depois da primeira entrega. O fluxo do formulário e o motor de cálculo não mudaram de comportamento; os 21 testes continuam passando.
+
+1. **Sem em dash.** O caractere foi removido de código, comentários, textos da interface e documentos (`README.md`, `MELHORIAS.md`, `BRIEF.md`, `AGENTS.md`), trocado por vírgula, ponto, dois pontos ou parênteses. Nas células sem valor (tabelas, relatório de impressão, `fmt()` em `engine.ts` e `units.ts`) o marcador passou a ser "n/d". Observação: o bloco de `AGENTS.md` é regenerado pelo `next dev` com o texto original.
+2. **Tutorial reescrito** (`src/components/Onboarding.tsx`). Cada conceito virou um cartão com ícone do `lucide-react`, uma definição curta e, separado, um bloco destacado "Exemplo:" com o Caso A. As quatro dimensões e as três recomendações aparecem como selos coloridos, e as cinco etapas do formulário como cartões numerados. O conteúdo técnico segue `pbl6/04_Tutorial.md`.
+3. **Casos como tela principal, tutorial em modal.** O app abre sempre na lista de casos (`App.tsx`). O tutorial é um `Dialog` (`src/components/ui/dialog.tsx`, sobre Base UI) com rolagem interna, indicador de progresso e botões Anterior/Próximo. Na primeira visita ele abre sozinho; pode ser fechado a qualquer momento (fechar marca como visto). O botão "Mostrar Tutorial" no cabeçalho o reabre em qualquer tela, inclusive dentro do wizard, sem perder o caso aberto.
+4. **Tema claro/escuro.** Botão sol/lua no cabeçalho (`src/components/ThemeToggle.tsx`) alterna a classe `dark` em `<html>`. A escolha fica em `localStorage`; sem escolha salva, vale `prefers-color-scheme`. Um script em `layout.tsx` aplica o tema antes da primeira pintura. As cores fixas de alertas, selos e gráfico ganharam variantes escuras (o gráfico usa os tokens do tema). Casos, tutorial e wizard (incluindo Resultado) foram conferidos em captura de tela nos dois temas; o relatório de impressão continua em preto e branco.

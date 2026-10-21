@@ -10,12 +10,12 @@ export function PrintReport({ c, ev }: { c: FrameworkCase; ev: CaseEvaluation })
   const dec = c.decisions[c.decisions.length - 1];
   return (
     <article className="hidden text-[11pt] leading-snug text-black print:block">
-      <h1 className="text-xl font-bold">Framework de decisão pós-MVP — {cfg.name || "caso sem nome"}</h1>
+      <h1 className="text-xl font-bold">Framework de decisão pós-MVP: {cfg.name || "caso sem nome"}</h1>
       <p>
-        Gerado em {new Date().toLocaleString("pt-BR")} · Tipo de dados: {DATA_LABEL[cfg.dataType]} · Período: {cfg.period || "—"}
+        Gerado em {new Date().toLocaleString("pt-BR")} · Tipo de dados: {DATA_LABEL[cfg.dataType]} · Período: {cfg.period || "n/d"}
       </p>
       <p className="mt-2">
-        <strong>Hipótese de valor:</strong> {cfg.hypothesis.text || "—"}
+        <strong>Hipótese de valor:</strong> {cfg.hypothesis.text || "n/d"}
       </p>
       <p>{ev.hypothesis.message}</p>
 
@@ -95,8 +95,8 @@ export function PrintReport({ c, ev }: { c: FrameworkCase; ev: CaseEvaluation })
         {c.barriers.map((b) => (
           <li key={b.id}>
             <strong>{b.name}</strong>: {BARRIER_STATUS_LABELS[b.status]}
-            {b.evidence ? ` — evidência: ${b.evidence}` : ""}
-            {b.status === "em_tratamento" ? ` — plano${b.planApproved ? " aprovado" : " não aprovado"}: ${b.plan}` : ""}
+            {b.evidence ? `. Evidência: ${b.evidence}` : ""}
+            {b.status === "em_tratamento" ? `. Plano${b.planApproved ? " aprovado" : " não aprovado"}: ${b.plan}` : ""}
           </li>
         ))}
       </ul>

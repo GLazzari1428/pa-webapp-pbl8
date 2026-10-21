@@ -87,7 +87,7 @@ export function StepConfig({ c, update, ev }: StepProps) {
           ))}
         </div>
         <p className="mt-2 text-sm" aria-live="polite">
-          Soma dos pesos: <strong>{fmt(sumW, 2)}</strong> {Math.abs(sumW - 1) > 1e-6 ? "— precisa ser 1,00." : "✓"}
+          Soma dos pesos: <strong>{fmt(sumW, 2)}</strong> {Math.abs(sumW - 1) > 1e-6 ? "(precisa ser 1,00)." : "✓"}
         </p>
         {err("weights") && <p className="text-sm font-medium text-destructive">{err("weights")}</p>}
       </fieldset>

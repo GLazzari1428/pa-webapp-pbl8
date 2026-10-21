@@ -1,4 +1,4 @@
-# Framework de decisão pós-MVP de iniciativas de IA — aplicação web (PBL8)
+# Framework de decisão pós-MVP de iniciativas de IA: aplicação web (PBL8)
 
 Aplicação web que substitui a planilha do "Framework de decisão pós-MVP de iniciativas de IA" (Grupo 14, Pesquisa Aplicada, PUCPR). Corresponde à Etapa 5 da DSR (Melhorias). Ela apoia a decisão de **Escalar**, **Pivotar** ou **Descontinuar** uma iniciativa de IA depois do MVP, seguindo as regras do artigo (`pbl6/artigo/main.tex`).
 

@@ -89,7 +89,7 @@ export function Wizard({ c, update, onClose }: { c: FrameworkCase; update: StepP
                   <span>
                     {s.title}
                     {pendingCount[i] > 0 && i !== 3 && (
-                      <span className={cn("block text-xs", i === step ? "text-primary-foreground/90" : "text-amber-800")}>
+                      <span className={cn("block text-xs", i === step ? "text-primary-foreground/90" : "text-amber-800 dark:text-amber-300")}>
                         {pendingCount[i]} pendência(s)
                       </span>
                     )}

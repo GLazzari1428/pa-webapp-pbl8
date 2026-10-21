@@ -53,7 +53,7 @@ export function formatInput(n: number | null): string {
 }
 
 export function formatValue(n: number | null, ind: Pick<Indicator, "unit" | "customUnit">): string {
-  if (n === null) return "—";
+  if (n === null) return "n/d";
   const num = n.toLocaleString("pt-BR", { maximumFractionDigits: 2 });
   if (ind.unit === "percentual") return `${num}%`;
   if (ind.unit === "moeda") return `R$ ${n.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;

@@ -69,7 +69,7 @@ export function StepDecision({ c, update, ev }: StepProps) {
               options={RECS.map((r) => ({ value: r, label: r }))}
             />
             <div className="flex items-end pb-1 text-sm" aria-live="polite">
-              {draft.decision && rec && (draft.decision === rec ? <span>Concordância com a recomendação.</span> : <span className="font-medium text-amber-800">Divergência da recomendação ({rec}): justifique com as evidências consideradas.</span>)}
+              {draft.decision && rec && (draft.decision === rec ? <span>Concordância com a recomendação.</span> : <span className="font-medium text-amber-800 dark:text-amber-300">Divergência da recomendação ({rec}): justifique com as evidências consideradas.</span>)}
             </div>
             <TextAreaField className="md:col-span-2" label="Justificativa" required help={HELP.justification} value={draft.justification} error={err("justification")} onChange={(v) => setDraft({ justification: v })} />
             <TextAreaField className="md:col-span-2" label="Plano de ação" required help={HELP.actionPlan} value={draft.actionPlan} error={err("actionPlan")} onChange={(v) => setDraft({ actionPlan: v })} />
@@ -130,14 +130,14 @@ function FrozenDecision({ record, onReopen }: { record: DecisionRecord; onReopen
     ["Plano de ação", record.actionPlan],
     ["Responsável", record.owner],
     ["Data da decisão", record.decisionDate],
-    ["Revisão prevista", record.reviewDate || "—"],
-    ["Critério para revisão", record.reviewCriterion || "—"],
-    ["Evidências consideradas", record.evidenceConsidered || "—"],
+    ["Revisão prevista", record.reviewDate || "n/d"],
+    ["Critério para revisão", record.reviewCriterion || "n/d"],
+    ["Evidências consideradas", record.evidenceConsidered || "n/d"],
   ];
   return (
     <section aria-labelledby="frozen-title" className="rounded-xl border-2 bg-card p-4">
       <h2 id="frozen-title" className="flex items-center gap-2 text-lg font-semibold">
-        <Lock className="size-4" aria-hidden="true" /> Decisão registrada (v{record.version}) — somente leitura
+        <Lock className="size-4" aria-hidden="true" /> Decisão registrada (v{record.version}), somente leitura
       </h2>
       <p className="text-sm text-muted-foreground">Salva em {new Date(record.savedAt).toLocaleString("pt-BR")}. Este registro não pode ser alterado.</p>
       <dl className="mt-3 grid gap-x-4 gap-y-2 text-sm md:grid-cols-[12rem_1fr]">

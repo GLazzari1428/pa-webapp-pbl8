@@ -624,6 +624,6 @@ export function fmtNum(n: number): string {
 }
 
 export function fmt(n: number | null | undefined, digits = 3): string {
-  if (n === null || n === undefined || !Number.isFinite(n)) return "—";
+  if (n === null || n === undefined || !Number.isFinite(n)) return "n/d";
   return n.toLocaleString("pt-BR", { minimumFractionDigits: digits, maximumFractionDigits: digits });
 }

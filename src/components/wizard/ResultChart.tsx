@@ -32,6 +32,8 @@ const SHORT: Record<string, string> = {
 
 const BAR_COLOR = "#1d4ed8"; // azul 700: contraste 6,7:1 sobre branco
 const MISSING_COLOR = "#9ca3af";
+// Tooltip segue os tokens do tema para ficar legível no claro e no escuro.
+const TOOLTIP_STYLE = { background: "var(--popover)", color: "var(--popover-foreground)", border: "1px solid var(--border)", borderRadius: 8 };
 
 export function ResultChart({ ev, t }: { ev: CaseEvaluation; t: Thresholds }) {
   const [tab, setTab] = useState<"dim" | "sens">("dim");
@@ -95,13 +97,14 @@ export function ResultChart({ ev, t }: { ev: CaseEvaluation; t: Thresholds }) {
               <div className="h-72 w-full" aria-hidden="true">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={dimData} margin={{ top: 12, right: 16, bottom: 4, left: -8 }}>
-                    <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: "#374151", fontSize: 12 }} />
-                    <YAxis domain={[0, 1]} ticks={[0, 0.2, 0.4, 0.6, 0.8, 1]} tickLine={false} axisLine={false} tick={{ fill: "#374151", fontSize: 12 }} />
-                    <ReferenceLine y={t.scale} stroke="#047857" strokeDasharray="4 4" label={{ value: `Escalar ${fmt(t.scale, 2)}`, position: "insideTopRight", fill: "#047857", fontSize: 11 }} />
-                    <ReferenceLine y={t.lower} stroke="#b45309" strokeDasharray="4 4" label={{ value: `Pivotar ${fmt(t.lower, 2)}`, position: "insideTopRight", fill: "#b45309", fontSize: 11 }} />
+                    <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="var(--border)" />
+                    <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} />
+                    <YAxis domain={[0, 1]} ticks={[0, 0.2, 0.4, 0.6, 0.8, 1]} tickLine={false} axisLine={false} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} />
+                    <ReferenceLine y={t.scale} stroke="var(--chart-scale)" strokeDasharray="4 4" label={{ value: `Escalar ${fmt(t.scale, 2)}`, position: "insideTopRight", fill: "var(--chart-scale)", fontSize: 11 }} />
+                    <ReferenceLine y={t.lower} stroke="var(--chart-pivot)" strokeDasharray="4 4" label={{ value: `Pivotar ${fmt(t.lower, 2)}`, position: "insideTopRight", fill: "var(--chart-pivot)", fontSize: 11 }} />
                     <Tooltip
-                      cursor={{ fill: "rgba(0,0,0,0.04)" }}
+                      contentStyle={TOOLTIP_STYLE}
+                      cursor={{ fill: "var(--muted)" }}
                       formatter={(v, _n, p) => [(p.payload as { missing: boolean }).missing ? "sem cobertura" : fmt(Number(v)), "Nota S_j"]}
                       labelFormatter={(_l, p) => (p?.[0]?.payload as { full?: string })?.full ?? ""}
                     />
@@ -149,16 +152,16 @@ export function ResultChart({ ev, t }: { ev: CaseEvaluation; t: Thresholds }) {
                         <stop offset="100%" stopColor={BAR_COLOR} stopOpacity={0.02} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="var(--border)" />
                     <ReferenceArea y1={t.scale} y2={1} fill="#10b981" fillOpacity={0.08} />
                     <ReferenceArea y1={t.lower} y2={t.scale} fill="#f59e0b" fillOpacity={0.08} />
                     <ReferenceArea y1={0} y2={t.lower} fill="#ef4444" fillOpacity={0.06} />
-                    <XAxis dataKey="i" tickLine={false} axisLine={false} tick={{ fill: "#374151", fontSize: 12 }} label={{ value: "combinações, da menor para a maior S", position: "insideBottom", offset: -2, fill: "#4b5563", fontSize: 11 }} height={36} />
-                    <YAxis domain={[0, 1]} ticks={[0, 0.2, 0.4, 0.6, 0.8, 1]} tickLine={false} axisLine={false} tick={{ fill: "#374151", fontSize: 12 }} />
-                    <ReferenceLine y={ev.score} stroke="#111827" strokeDasharray="2 3" label={{ value: `S atual ${fmt(ev.score)}`, position: "insideBottomLeft", fill: "#111827", fontSize: 11 }} />
-                    <ReferenceLine y={t.scale} stroke="#047857" strokeDasharray="4 4" />
-                    <ReferenceLine y={t.lower} stroke="#b45309" strokeDasharray="4 4" />
-                    <Tooltip formatter={(v) => [fmt(Number(v)), "S"]} labelFormatter={(l) => `Combinação ${l}`} />
+                    <XAxis dataKey="i" tickLine={false} axisLine={false} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} label={{ value: "combinações, da menor para a maior S", position: "insideBottom", offset: -2, fill: "var(--muted-foreground)", fontSize: 11 }} height={36} />
+                    <YAxis domain={[0, 1]} ticks={[0, 0.2, 0.4, 0.6, 0.8, 1]} tickLine={false} axisLine={false} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} />
+                    <ReferenceLine y={ev.score} stroke="var(--foreground)" strokeDasharray="2 3" label={{ value: `S atual ${fmt(ev.score)}`, position: "insideBottomLeft", fill: "var(--foreground)", fontSize: 11 }} />
+                    <ReferenceLine y={t.scale} stroke="var(--chart-scale)" strokeDasharray="4 4" />
+                    <ReferenceLine y={t.lower} stroke="var(--chart-pivot)" strokeDasharray="4 4" />
+                    <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(v) => [fmt(Number(v)), "S"]} labelFormatter={(l) => `Combinação ${l}`} />
                     <Area isAnimationActive={false} type="monotone" dataKey="score" stroke={BAR_COLOR} strokeWidth={2} fill="url(#sensFill)" />
                   </AreaChart>
                 </ResponsiveContainer>

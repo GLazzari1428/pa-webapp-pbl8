@@ -41,7 +41,7 @@ export function StepResult({ c, update, ev }: StepProps) {
     });
 
   if (c.indicators.length === 0)
-    return <p className="rounded-lg border border-amber-300 bg-amber-50 p-4 text-amber-950">Cadastre indicadores na etapa 2 para ver o resultado.</p>;
+    return <p className="rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/40 p-4 text-amber-950 dark:text-amber-100">Cadastre indicadores na etapa 2 para ver o resultado.</p>;
 
   return (
     <div className="space-y-8">
@@ -62,7 +62,7 @@ export function StepResult({ c, update, ev }: StepProps) {
           <p className="text-xs text-muted-foreground">
             Limiares: Pivotar ≥ {fmt(t.lower, 2)}; Escalar ≥ {fmt(t.scale, 2)}
           </p>
-          {ev.borderline && <p className="mt-1 text-sm font-medium text-amber-800">Zona de fronteira: S está a até {fmt(t.border, 2)} de um limiar.</p>}
+          {ev.borderline && <p className="mt-1 text-sm font-medium text-amber-800 dark:text-amber-300">Zona de fronteira: S está a até {fmt(t.border, 2)} de um limiar.</p>}
         </div>
         <div className="rounded-xl border bg-card p-4">
           <p className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -98,7 +98,7 @@ export function StepResult({ c, update, ev }: StepProps) {
       </div>
 
       {belowLower && (
-        <fieldset className="grid gap-4 rounded-xl border border-amber-300 p-4 md:grid-cols-2">
+        <fieldset className="grid gap-4 rounded-xl border border-amber-300 dark:border-amber-700 p-4 md:grid-cols-2">
           <legend className="px-1 font-semibold">Julgamento de perda corrigível</legend>
           <p className="text-sm md:col-span-2">
             S ficou abaixo do limiar inferior ({fmt(t.lower, 2)}). Se os decisores julgam que a perda está concentrada numa
@@ -147,7 +147,7 @@ export function StepResult({ c, update, ev }: StepProps) {
             S varia de <strong>{fmt(ev.sensitivity.min)}</strong> a <strong>{fmt(ev.sensitivity.max)}</strong> nas{" "}
             {ev.sensitivity.combos.length} combinações.
           </p>
-          <p className={`mt-1 text-sm font-medium ${ev.sensitivity.stable ? "text-emerald-800" : "text-amber-800"}`}>{ev.sensitivity.label}</p>
+          <p className={`mt-1 text-sm font-medium ${ev.sensitivity.stable ? "text-emerald-800 dark:text-emerald-300" : "text-amber-800 dark:text-amber-300"}`}>{ev.sensitivity.label}</p>
           <p className="mt-2 text-sm">
             Recomendação final nas combinações:{" "}
             {Object.entries(ev.sensitivity.distribution)
@@ -169,7 +169,7 @@ export function StepResult({ c, update, ev }: StepProps) {
             <span className="text-muted-foreground">(Escalar exige que ela também alcance {fmt(t.scale, 2)}).</span>
           </p>
           {ev.leadingAhead.length > 0 && (
-            <p className="mt-2 text-sm text-amber-800">
+            <p className="mt-2 text-sm text-amber-800 dark:text-amber-300">
               Sinais antecedentes à frente do resultado em: {ev.leadingAhead.map((d) => DIMENSION_LABELS[d]).join(", ")}. A
               tendência é positiva, mas o efeito ainda não apareceu nos indicadores de resultado.
             </p>
@@ -199,7 +199,7 @@ export function StepResult({ c, update, ev }: StepProps) {
                 const r = ev.indicators.find((x) => x.id === ind.id)!;
                 return (
                   <tr key={ind.id} className="border-b last:border-0">
-                    <td className="py-1 pr-2">{ind.name || "—"}</td>
+                    <td className="py-1 pr-2">{ind.name || "n/d"}</td>
                     <td className="py-1 pr-2">{DIMENSION_LABELS[ind.dimension]}</td>
                     <td className="py-1 pr-2">{ind.kpiType === "resultado" ? "Resultado" : "Antecedente"}</td>
                     <td className="py-1 pr-2">

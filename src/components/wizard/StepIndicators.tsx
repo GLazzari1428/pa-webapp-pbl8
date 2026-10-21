@@ -47,7 +47,7 @@ export function StepIndicators({ c, update, ev }: StepProps) {
               <li key={d}>
                 {DIMENSION_LABELS[d]}: {list.length} indicador(es), soma {fmt(s, 2)}{" "}
                 {list.length > 0 && Math.abs(s - 1) > 1e-6 ? <strong className="text-destructive">(ajustar)</strong> : null}
-                {list.length === 0 ? <span className="text-amber-800">(sem indicador: cobertura zero, impede Escalar)</span> : null}
+                {list.length === 0 ? <span className="text-amber-800 dark:text-amber-300">(sem indicador: cobertura zero, impede Escalar)</span> : null}
               </li>
             );
           })}
@@ -147,7 +147,7 @@ export function StepIndicators({ c, update, ev }: StepProps) {
                       Nota normalizada: <strong>{fmt(res.score)}</strong> · incluída no cálculo
                     </>
                   ) : (
-                    <span className="text-amber-800">
+                    <span className="text-amber-800 dark:text-amber-300">
                       Fora do cálculo (sem evidência válida). Falta: {res?.missing.length ? res.missing.join(", ") : "linha de base/meta válidas"}.
                     </span>
                   )}

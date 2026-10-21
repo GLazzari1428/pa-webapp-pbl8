@@ -68,7 +68,7 @@ export const CASO_A: FrameworkCase = {
   createdAt: STAMP,
   updatedAt: STAMP,
   config: {
-    name: "Caso A — assistente de atendimento com LLM",
+    name: "Caso A: assistente de atendimento com LLM",
     context: "Assistente virtual com IA (LLM) que responde clientes no primeiro nível do suporte.",
     dataType: "simulado",
     period: "Meses 1 a 3 do piloto",
@@ -108,7 +108,7 @@ export const CONECTAHIT: FrameworkCase = {
   createdAt: STAMP,
   updatedAt: STAMP,
   config: {
-    name: "Conectahit — licenciamento musical",
+    name: "Conectahit: licenciamento musical",
     context:
       "Plataforma Marketplace + SaaS de licenciamento musical para usos audiovisuais e comerciais. Parte assistida por IA (enriquecimento de metadados).",
     dataType: "referencia",
@@ -150,7 +150,7 @@ export const SQUAD: FrameworkCase = {
   createdAt: STAMP,
   updatedAt: STAMP,
   config: {
-    name: "Squad de Negociação — recuperação de pedidos abandonados",
+    name: "Squad de Negociação: recuperação de pedidos abandonados",
     context:
       "Agentes de IA identificam pedidos abandonados na Plataforma de Canais, enviam follow-up por e-mail com respostas apoiadas em RAG e registram o andamento no CRM.",
     dataType: "referencia",
