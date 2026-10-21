@@ -88,7 +88,7 @@ export function CaseList({
               const ev = evaluateCase(c);
               const dec = latestDecision(c);
               return (
-                <li key={c.id} className="rounded-xl border bg-card p-4">
+                <li key={c.id} className="rounded-md bg-card p-4 shadow-border">
                   <h2 className="font-medium">{c.config.name || "Caso sem nome"}</h2>
                   <p className="mt-1 text-sm text-muted-foreground">
                     S = {c.indicators.length ? ev.score.toLocaleString("pt-BR", { maximumFractionDigits: 3 }) : "n/d"} ·{" "}
@@ -133,9 +133,9 @@ export function CaseList({
         <p className="text-sm text-muted-foreground">
           Os três casos avaliados no artigo, com dados simulados ou de referência. Carregar cria uma cópia editável.
         </p>
-        <ul className="grid gap-3 md:grid-cols-3">
+        <ul className="divide-y rounded-md bg-card shadow-border">
           {EXAMPLE_CASES.map((ex) => (
-            <li key={ex.id} className="flex flex-col justify-between gap-3 rounded-xl border p-4">
+            <li key={ex.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h3 className="font-medium">{ex.config.name}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">{ex.config.context}</p>

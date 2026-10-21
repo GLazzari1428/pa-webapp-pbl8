@@ -38,7 +38,7 @@ export function StepDecision({ c, update, ev }: StepProps) {
 
   return (
     <div className="space-y-8">
-      <div className="rounded-lg border bg-muted/40 p-4 text-sm">
+      <div className="rounded-md bg-muted/40 p-4 shadow-border text-sm">
         Recomendação calculada agora: <RecBadge rec={rec} pending={ev.outcome.pending} /> (S = {fmt(ev.score)}). {ev.explanation}
       </div>
 
@@ -69,7 +69,7 @@ export function StepDecision({ c, update, ev }: StepProps) {
               options={RECS.map((r) => ({ value: r, label: r }))}
             />
             <div className="flex items-end pb-1 text-sm" aria-live="polite">
-              {draft.decision && rec && (draft.decision === rec ? <span>Concordância com a recomendação.</span> : <span className="font-medium text-amber-800 dark:text-amber-300">Divergência da recomendação ({rec}): justifique com as evidências consideradas.</span>)}
+              {draft.decision && rec && (draft.decision === rec ? <span>Concordância com a recomendação.</span> : <span className="font-medium text-pivotar">Divergência da recomendação ({rec}): justifique com as evidências consideradas.</span>)}
             </div>
             <TextAreaField className="md:col-span-2" label="Justificativa" required help={HELP.justification} value={draft.justification} error={err("justification")} onChange={(v) => setDraft({ justification: v })} />
             <TextAreaField className="md:col-span-2" label="Plano de ação" required help={HELP.actionPlan} value={draft.actionPlan} error={err("actionPlan")} onChange={(v) => setDraft({ actionPlan: v })} />
@@ -99,7 +99,7 @@ export function StepDecision({ c, update, ev }: StepProps) {
           </h2>
           <ol className="space-y-2">
             {[...c.decisions].reverse().map((d) => (
-              <li key={d.id} className="rounded-lg border p-3 text-sm">
+              <li key={d.id} className="rounded-md bg-card p-3 shadow-border text-sm">
                 <p>
                   <strong>v{d.version}</strong> · salva em {new Date(d.savedAt).toLocaleString("pt-BR")} · decisão{" "}
                   <RecBadge rec={d.decision} /> · recomendação na época: {d.snapshot.recommendation ?? "pendente"} (S = {fmt(d.snapshot.score)})
@@ -135,7 +135,7 @@ function FrozenDecision({ record, onReopen }: { record: DecisionRecord; onReopen
     ["Evidências consideradas", record.evidenceConsidered || "n/d"],
   ];
   return (
-    <section aria-labelledby="frozen-title" className="rounded-xl border-2 bg-card p-4">
+    <section aria-labelledby="frozen-title" className="rounded-md bg-card p-4 shadow-[0_0_0_1.5px_var(--foreground)]">
       <h2 id="frozen-title" className="flex items-center gap-2 text-lg font-semibold">
         <Lock className="size-4" aria-hidden="true" /> Decisão registrada (v{record.version}), somente leitura
       </h2>

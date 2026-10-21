@@ -29,7 +29,7 @@ export function StepBarriers({ c, update, ev }: StepProps) {
           const headingId = `bar-${b.id}-title`;
           return (
             <li key={b.id}>
-              <fieldset aria-labelledby={headingId} className="rounded-xl border bg-card p-4">
+              <fieldset aria-labelledby={headingId} className="rounded-md bg-card p-4 shadow-border">
                 <div className="mb-3 flex items-center justify-between gap-2">
                   <h2 id={headingId} className="font-semibold">
                     Barreira {idx + 1}: {b.name || "sem nome"}

@@ -162,3 +162,35 @@ Ressalvas honestas: (a) o score novo é autoavaliação, sem revisão do orienta
 2. **Shadow-as-border**: utilitários `shadow-border` (`0 0 0 1px var(--border)`) e `shadow-border-raised` (mais `0 2px 2px rgba(0,0,0,0.04)`) em `globals.css`. Usados no `Card` (no lugar do `ring`), no `Dialog` (no lugar de `border` + `shadow-lg`), no cabeçalho, no `ThemeToggle` e nos separadores do tutorial.
 3. **Tutorial**: sem ícones, sem selos coloridos de dimensões e de Escalar/Pivotar/Descontinuar, sem grades de cartões. Cada conceito é título (peso 600) + parágrafo (400). O exemplo é uma citação tipográfica: recuo, texto em `muted-foreground` e rótulo "EXEMPLO" pequeno em peso 500, sem caixa nem borda. A página 1 virou três parágrafos curtos, o exemplo e a ressalva. As cinco etapas viraram lista numerada simples.
 4. **Cabeçalho**: "Mostrar Tutorial" deixou de ser link sublinhado e passou a botão discreto com os mesmos tokens do `ThemeToggle` (texto `foreground`, hover `muted`).
+
+## Versão 4: sistema de design no app inteiro
+
+Extensão do `DESIGN.md` para Casos, as 5 etapas do wizard e os alertas de pendência. Nenhuma regra de validação, mensagem ou fórmula do motor foi alterada; só cor, borda, raio, peso e espaçamento.
+
+### O que mudou
+
+1. **Tokens funcionais**: `globals.css` expõe `--color-escalar` e `--color-pivotar` (mapeados para `--chart-scale` e `--chart-pivot`, já existentes, com variante dark). Assim, `text-escalar`, `text-pivotar`, `bg-escalar` etc. substituem as classes cruas `emerald-*`, `amber-*`, `red-*` e `slate-*`. Descontinuar/erro usa `--destructive`.
+2. **`IssueList`** ("O que falta nesta etapa"): fundo `bg-muted`, texto `foreground`, borda por `shadow-border`, raio `rounded-md` e ícone pequeno `CircleAlert` em cinza no lugar do âmbar saturado. Título, lista e `role="status" aria-live="polite"` continuam iguais.
+3. **Indicador de etapas** (`Wizard.tsx`): a etapa ativa deixou de ser invertida (fundo preto). Agora tem contorno de 1,5px em `foreground` e texto peso 600; as demais usam `shadow-border` e texto `muted-foreground`. "N pendência(s)" virou `text-muted-foreground`, porque âmbar fica reservado para Pivotar.
+4. **`RecBadge`**: pill (`rounded-full`) com fundo na cor funcional e texto `background`, como `badge-escalar/pivotar/descontinuar` do `DESIGN.md`; "Pendente"/"n/d" ficou neutro (`bg-muted`).
+5. **Cards e caixas** em `CaseList`, `StepIndicators`, `StepBarriers`, `StepDecision`, `StepResult` e `ResultChart`: `border` + `rounded-xl`/`rounded-lg` viraram `shadow-border` + `rounded-md`. Os dois `border-2` (card da recomendação e decisão congelada) viraram um contorno por sombra de 1,5px em `foreground`, que é o único destaque da tela. O fieldset "Julgamento de perda corrigível" mantém contorno em âmbar via `--chart-pivot`, porque o conteúdo é de fato sobre Pivotar.
+6. **Exemplos em Casos**: a grade de 3 cards virou uma lista com divisores dentro de uma só superfície.
+
+### Autodiagnóstico dos 10 sinais (app inteiro: Casos, etapas 1 a 5, pendências)
+
+| # | Sinal | Antes (V3) | Depois (V4) |
+|---|-------|-----------|-------------|
+| 1 | Gradiente tech genérico | Não | Não |
+| 2 | Destaque índigo/violeta/azul por padrão | Não (cor crua era âmbar/esmeralda/vermelho/slate) | Não |
+| 3 | Grade de cards repetidos | Sim (3 cards de exemplo em Casos) | Parcial (a lista de casos salvos continua em 2 colunas de cards; mantida porque cada card tem conteúdo e ações diferentes) |
+| 4 | Tarja lateral colorida | Não | Não |
+| 5 | Blur/glassmorphism | Não | Não |
+| 6 | Número gigante decorativo | Não | Não (o `RecBadge` grande no resultado é o estado calculado, não decoração) |
+| 7 | Ícone repetido em cada título | Não | Não (só um ícone pequeno no alerta de pendência) |
+| 8 | Tudo centralizado | Não | Não |
+| 9 | Fonte padrão do sistema | Não | Não |
+| 10 | Superfície errada / cor sem função | Sim (âmbar usado para "pendente", caixas âmbar saturadas, etapa ativa invertida) | Não |
+
+**Score: antes 2 de 10 no app inteiro; depois 0 claros + 1 parcial.**
+
+Ressalvas honestas: (a) é autoavaliação, sem revisão do orientador nem teste com usuário; (b) **não houve teste visual no navegador** nesta rodada, a verificação foi por `grep`, build, testes e lint, então contraste real no tema escuro (texto escuro sobre `#34d399`/`#fbbf24`) e o contorno de 1,5px da etapa ativa precisam ser conferidos na tela; (c) `PrintReport.tsx` mantém `border border-black` nas tabelas de propósito: é só para impressão, onde sombra não é impressa de forma confiável; (d) os componentes base `ui/input`, `ui/textarea` e `ui/button` mantêm borda CSS (`border-input`) e `rounded-lg`, já que campo de formulário precisa de borda visível e de anel de foco; não foram mexidos.

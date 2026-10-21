@@ -37,7 +37,7 @@ export function StepIndicators({ c, update, ev }: StepProps) {
     <div className="space-y-6">
       <IssueList issues={c.indicators.length === 0 ? [{ message: "Cadastre ao menos um indicador." }, ...ev.indicatorIssues] : ev.indicatorIssues} />
 
-      <div className="rounded-lg border bg-muted/40 p-3 text-sm">
+      <div className="rounded-md bg-muted/40 p-3 shadow-border text-sm">
         <p className="font-medium">Soma dos pesos por dimensão (cada uma deve somar 1):</p>
         <ul className="mt-1 grid gap-1 sm:grid-cols-2">
           {DIMENSIONS.map((d) => {
@@ -47,7 +47,7 @@ export function StepIndicators({ c, update, ev }: StepProps) {
               <li key={d}>
                 {DIMENSION_LABELS[d]}: {list.length} indicador(es), soma {fmt(s, 2)}{" "}
                 {list.length > 0 && Math.abs(s - 1) > 1e-6 ? <strong className="text-destructive">(ajustar)</strong> : null}
-                {list.length === 0 ? <span className="text-amber-800 dark:text-amber-300">(sem indicador: cobertura zero, impede Escalar)</span> : null}
+                {list.length === 0 ? <span className="text-pivotar">(sem indicador: cobertura zero, impede Escalar)</span> : null}
               </li>
             );
           })}
@@ -63,7 +63,7 @@ export function StepIndicators({ c, update, ev }: StepProps) {
           const headingId = `ind-${ind.id}-title`;
           return (
             <li key={ind.id}>
-              <fieldset aria-labelledby={headingId} className="rounded-xl border bg-card p-4">
+              <fieldset aria-labelledby={headingId} className="rounded-md bg-card p-4 shadow-border">
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                   <h2 id={headingId} className="font-semibold">
                     Indicador {idx + 1}: {ind.name || "sem nome"}
@@ -147,7 +147,7 @@ export function StepIndicators({ c, update, ev }: StepProps) {
                       Nota normalizada: <strong>{fmt(res.score)}</strong> · incluída no cálculo
                     </>
                   ) : (
-                    <span className="text-amber-800 dark:text-amber-300">
+                    <span className="text-pivotar">
                       Fora do cálculo (sem evidência válida). Falta: {res?.missing.length ? res.missing.join(", ") : "linha de base/meta válidas"}.
                     </span>
                   )}

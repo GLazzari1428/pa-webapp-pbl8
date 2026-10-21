@@ -73,14 +73,14 @@ export function Wizard({ c, update, onClose }: { c: FrameworkCase; update: StepP
                   onClick={() => setStep(i)}
                   aria-current={i === step ? "step" : undefined}
                   className={cn(
-                    "flex w-full items-center gap-2 rounded-lg border px-3 py-2 text-left text-sm focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-                    i === step ? "border-primary bg-primary text-primary-foreground" : "bg-card hover:bg-muted",
+                    "flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+                    i === step ? "bg-card font-semibold text-foreground shadow-[0_0_0_1.5px_var(--foreground)]" : "bg-card text-muted-foreground shadow-border hover:bg-muted hover:text-foreground",
                   )}
                 >
                   <span
                     className={cn(
                       "inline-flex size-6 shrink-0 items-center justify-center rounded-full border text-xs",
-                      i === step ? "border-primary-foreground" : "border-foreground/40",
+                      i === step ? "border-foreground" : "border-foreground/30",
                     )}
                     aria-hidden="true"
                   >
@@ -89,7 +89,7 @@ export function Wizard({ c, update, onClose }: { c: FrameworkCase; update: StepP
                   <span>
                     {s.title}
                     {pendingCount[i] > 0 && i !== 3 && (
-                      <span className={cn("block text-xs", i === step ? "text-primary-foreground/90" : "text-amber-800 dark:text-amber-300")}>
+                      <span className={"block text-xs font-normal text-muted-foreground"}>
                         {pendingCount[i]} pendência(s)
                       </span>
                     )}

@@ -41,12 +41,12 @@ export function StepResult({ c, update, ev }: StepProps) {
     });
 
   if (c.indicators.length === 0)
-    return <p className="rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/40 p-4 text-amber-950 dark:text-amber-100">Cadastre indicadores na etapa 2 para ver o resultado.</p>;
+    return <p className="rounded-md bg-muted p-4 text-foreground shadow-border">Cadastre indicadores na etapa 2 para ver o resultado.</p>;
 
   return (
     <div className="space-y-8">
       {cfg.dataType !== "real" && (
-        <p className="rounded-lg border bg-muted/50 p-3 text-sm">
+        <p className="rounded-md bg-muted/50 p-3 shadow-border text-sm">
           Dados {cfg.dataType === "simulado" ? "simulados" : "de referência"}: o resultado demonstra o funcionamento do
           instrumento, não o desempenho real da iniciativa.
         </p>
@@ -56,15 +56,15 @@ export function StepResult({ c, update, ev }: StepProps) {
         <h2 id="rec-title" className="sr-only">
           Recomendação
         </h2>
-        <div className="rounded-xl border bg-card p-4">
+        <div className="rounded-md bg-card p-4 shadow-border">
           <p className="text-sm text-muted-foreground">Pontuação total S</p>
           <p className="text-3xl font-semibold tabular-nums">{fmt(ev.score)}</p>
           <p className="text-xs text-muted-foreground">
             Limiares: Pivotar ≥ {fmt(t.lower, 2)}; Escalar ≥ {fmt(t.scale, 2)}
           </p>
-          {ev.borderline && <p className="mt-1 text-sm font-medium text-amber-800 dark:text-amber-300">Zona de fronteira: S está a até {fmt(t.border, 2)} de um limiar.</p>}
+          {ev.borderline && <p className="mt-1 text-sm font-medium text-pivotar">Zona de fronteira: S está a até {fmt(t.border, 2)} de um limiar.</p>}
         </div>
-        <div className="rounded-xl border bg-card p-4">
+        <div className="rounded-md bg-card p-4 shadow-border">
           <p className="flex items-center gap-1 text-sm text-muted-foreground">
             Faixa por pontuação <InfoTip text={HELP.band} label="Faixa por pontuação" />
           </p>
@@ -73,7 +73,7 @@ export function StepResult({ c, update, ev }: StepProps) {
           </p>
           <p className="mt-1 text-xs text-muted-foreground">O que S indicaria sozinho.</p>
         </div>
-        <div className="rounded-xl border-2 border-primary bg-card p-4">
+        <div className="rounded-md bg-card p-4 shadow-[0_0_0_1.5px_var(--foreground)]">
           <p className="flex items-center gap-1 text-sm text-muted-foreground">
             Recomendação final <InfoTip text={HELP.recommendation} label="Recomendação final" />
           </p>
@@ -84,7 +84,7 @@ export function StepResult({ c, update, ev }: StepProps) {
         </div>
       </section>
 
-      <div role="status" aria-live="polite" className="rounded-lg border bg-muted/40 p-4">
+      <div role="status" aria-live="polite" className="rounded-md bg-muted/40 p-4 shadow-border">
         <p className="font-medium">{ev.explanation}</p>
         {o.constraints.length > 0 && (
           <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
@@ -98,7 +98,7 @@ export function StepResult({ c, update, ev }: StepProps) {
       </div>
 
       {belowLower && (
-        <fieldset className="grid gap-4 rounded-xl border border-amber-300 dark:border-amber-700 p-4 md:grid-cols-2">
+        <fieldset className="grid gap-4 rounded-md p-4 shadow-[0_0_0_1px_var(--chart-pivot)] md:grid-cols-2">
           <legend className="px-1 font-semibold">Julgamento de perda corrigível</legend>
           <p className="text-sm md:col-span-2">
             S ficou abaixo do limiar inferior ({fmt(t.lower, 2)}). Se os decisores julgam que a perda está concentrada numa
@@ -139,7 +139,7 @@ export function StepResult({ c, update, ev }: StepProps) {
       </section>
 
       <section aria-labelledby="sens-title" className="grid gap-4 md:grid-cols-2">
-        <div className="rounded-xl border p-4">
+        <div className="rounded-md bg-card p-4 shadow-border">
           <h2 id="sens-title" className="flex items-center gap-1 font-semibold">
             Resumo da sensibilidade <InfoTip text={HELP.sensitivity} label="Sensibilidade" />
           </h2>
@@ -147,7 +147,7 @@ export function StepResult({ c, update, ev }: StepProps) {
             S varia de <strong>{fmt(ev.sensitivity.min)}</strong> a <strong>{fmt(ev.sensitivity.max)}</strong> nas{" "}
             {ev.sensitivity.combos.length} combinações.
           </p>
-          <p className={`mt-1 text-sm font-medium ${ev.sensitivity.stable ? "text-emerald-800 dark:text-emerald-300" : "text-amber-800 dark:text-amber-300"}`}>{ev.sensitivity.label}</p>
+          <p className={`mt-1 text-sm font-medium ${ev.sensitivity.stable ? "text-escalar" : "text-pivotar"}`}>{ev.sensitivity.label}</p>
           <p className="mt-2 text-sm">
             Recomendação final nas combinações:{" "}
             {Object.entries(ev.sensitivity.distribution)
@@ -161,7 +161,7 @@ export function StepResult({ c, update, ev }: StepProps) {
             </p>
           )}
         </div>
-        <div className="rounded-xl border p-4">
+        <div className="rounded-md bg-card p-4 shadow-border">
           <h2 className="font-semibold">Hipótese de valor e tipo de KPI</h2>
           <p className="mt-2 text-sm">{ev.hypothesis.message}</p>
           <p className="mt-2 text-sm">
@@ -169,7 +169,7 @@ export function StepResult({ c, update, ev }: StepProps) {
             <span className="text-muted-foreground">(Escalar exige que ela também alcance {fmt(t.scale, 2)}).</span>
           </p>
           {ev.leadingAhead.length > 0 && (
-            <p className="mt-2 text-sm text-amber-800 dark:text-amber-300">
+            <p className="mt-2 text-sm text-pivotar">
               Sinais antecedentes à frente do resultado em: {ev.leadingAhead.map((d) => DIMENSION_LABELS[d]).join(", ")}. A
               tendência é positiva, mas o efeito ainda não apareceu nos indicadores de resultado.
             </p>
@@ -177,7 +177,7 @@ export function StepResult({ c, update, ev }: StepProps) {
         </div>
       </section>
 
-      <details className="rounded-xl border p-4">
+      <details className="rounded-md bg-card p-4 shadow-border">
         <summary className="cursor-pointer font-semibold">Memória de cálculo (para auditoria)</summary>
         <div className="mt-4 overflow-x-auto">
           <table className="w-full min-w-[640px] text-sm">

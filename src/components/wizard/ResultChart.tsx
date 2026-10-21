@@ -60,7 +60,7 @@ export function ResultChart({ ev, t }: { ev: CaseEvaluation; t: Thresholds }) {
   ];
 
   return (
-    <div className="rounded-xl border bg-card">
+    <div className="rounded-md bg-card shadow-border">
       <div role="tablist" aria-label="Gráficos do resultado" className="grid grid-cols-2 border-b">
         {metrics.map((m) => (
           <button
