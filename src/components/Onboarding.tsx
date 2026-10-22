@@ -22,7 +22,7 @@ function Example({ children }: { children: ReactNode }) {
 
 function Concept({ title, children, example }: { title: string; children: ReactNode; example?: ReactNode }) {
   return (
-    <section>
+    <section className="rounded-md border border-foreground/15 bg-muted p-4">
       <h3 className="text-base font-semibold tracking-tight">{title}</h3>
       <p className="mt-1 text-sm leading-relaxed">{children}</p>
       {example && <Example>{example}</Example>}
