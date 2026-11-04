@@ -41,6 +41,25 @@ src/components/              onboarding, lista de casos, wizard e etapas
 tests/engine.test.ts         testes do motor
 ```
 
+## Servidor MCP
+
+A aplicação expõe um servidor MCP (Model Context Protocol) em `POST /api/mcp`, no transporte Streamable HTTP sem estado. Ele usa o mesmo motor de cálculo da interface web, então os escores são os mesmos. Com ele, um assistente de IA pode conduzir a entrevista e calcular a recomendação a partir de uma conversa.
+
+São cinco ferramentas. A `guia_de_perguntas` devolve as dimensões, as etapas e a pergunta de cada campo. A `modelo_de_caso` devolve um caso vazio com as quatro barreiras padrão. A `listar_exemplos` lista os três casos do artigo. A `validar_caso` aponta o que falta ou está inconsistente. A `avaliar_caso` calcula pontuação, faixa, recomendação, fronteira e sensibilidade aos pesos.
+
+O servidor não grava nada. A decisão final continua sendo humana e é registrada só na interface web. O endpoint também é público e não tem autenticação, então não envie dados sigilosos por ele.
+
+Para conectar, com a aplicação rodando em `npm run dev` ou `npm start`:
+
+```
+claude mcp add --transport http framework-pos-mvp http://localhost:3000/api/mcp
+codex mcp add framework-pos-mvp --url http://localhost:3000/api/mcp
+```
+
+Para clientes sem suporte a HTTP, use `npx mcp-remote http://localhost:3000/api/mcp`.
+
+Os arquivos ficam em `src/lib/mcp/` (esquema de entrada e servidor) e `src/app/api/mcp/route.ts` (rota). Os testes estão em `tests/mcp.test.ts` e `tests/mcp-route.test.ts`.
+
 ## Deploy gratuito na Vercel
 
 O projeto não usa servidor nem segredos, então funciona no plano gratuito (Hobby) da Vercel sem nenhuma configuração extra. Basta publicar esta pasta num repositório Git (GitHub, GitLab ou Bitbucket). Na Vercel, escolha **Add New… → Project**, importe o repositório e, se a pasta `pbl8/webapp` não estiver na raiz do repositório, informe-a em **Root Directory**. A Vercel detecta Next.js sozinha (comando de build `npm run build`, sem variáveis de ambiente). Depois disso, cada push na branch principal gera um novo deploy, e cada pull request ganha uma URL de pré-visualização. O deploy real não foi feito neste trabalho, por falta de credenciais; foi verificado apenas que `npm run build` termina sem erros.

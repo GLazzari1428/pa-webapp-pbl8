@@ -226,3 +226,19 @@ Em `StepConfig.tsx`, os quatro campos (`lower`, `scale`, `border`, `variation`) 
 - Textos curtos de rótulo (nomes de campo, opções de select) e as mensagens de validação de `engine.ts` não foram reescritos uma a uma contra a regra 3 (exemplo para toda definição); só removi o símbolo "≥" de uma delas.
 - Os dados de exemplo (`src/lib/data/examples.ts`) ainda usam "÷" nas descrições de origem da evidência, porque são conteúdo dos casos do artigo e não texto de interface.
 - Comentários de código ainda usam "S" e notação matemática; não aparecem para o usuário.
+
+## Versão 7: servidor MCP
+
+### O que mudou
+
+A aplicação ganhou um servidor MCP na rota `POST /api/mcp`, com transporte Streamable HTTP sem estado. Ele importa o mesmo motor de cálculo da interface, então não existe segunda implementação das regras e os testes do motor continuam sendo a referência. O motor, a interface e os dados de exemplo não foram alterados.
+
+O servidor tem cinco ferramentas: `guia_de_perguntas`, `modelo_de_caso`, `listar_exemplos`, `validar_caso` e `avaliar_caso`. O texto de instruções do servidor ensina o assistente a conduzir a entrevista: pedir os dados etapa por etapa, validar, pedir só o que falta e explicar o resultado. O servidor não grava nada, e a decisão humana continua só na interface web.
+
+O SDK `@modelcontextprotocol/sdk` e o `zod` viraram dependências diretas. Foram adicionados seis testes do contrato das ferramentas (incluindo os três escores do artigo pelo caminho do MCP) e dois testes da rota, além dos 21 testes que já existiam.
+
+### Limitações do plano
+
+- Não há autenticação. O endpoint é público e qualquer pessoa que alcance a URL pode usá-lo. Por isso o servidor não armazena nada e as instruções pedem que não se envie dados sigilosos.
+- O assistente pode transcrever errado o que o usuário disse, ou preencher um campo por conta própria. A validação aponta campos vazios e inconsistências, mas não detecta um valor plausível e errado. Confira o caso na interface web antes de registrar a decisão.
+- Não há transporte stdio, recursos nem prompts do MCP. O teste com um assistente real é manual e ainda não foi automatizado.
