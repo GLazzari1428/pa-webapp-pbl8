@@ -62,7 +62,7 @@ Os arquivos ficam em `src/lib/mcp/` (esquema de entrada e servidor) e `src/app/a
 
 ## Deploy gratuito na Vercel
 
-O projeto não usa servidor nem segredos, então funciona no plano gratuito (Hobby) da Vercel sem nenhuma configuração extra. Basta publicar esta pasta num repositório Git (GitHub, GitLab ou Bitbucket). Na Vercel, escolha **Add New… → Project**, importe o repositório e, se a pasta `pbl8/webapp` não estiver na raiz do repositório, informe-a em **Root Directory**. A Vercel detecta Next.js sozinha (comando de build `npm run build`, sem variáveis de ambiente). Depois disso, cada push na branch principal gera um novo deploy, e cada pull request ganha uma URL de pré-visualização. O deploy real não foi feito neste trabalho, por falta de credenciais; foi verificado apenas que `npm run build` termina sem erros.
+O projeto não usa banco de dados nem segredos (o endpoint MCP não guarda nada), então funciona no plano gratuito (Hobby) da Vercel sem nenhuma configuração extra. Basta publicar esta pasta num repositório Git (GitHub, GitLab ou Bitbucket). Na Vercel, escolha **Add New… → Project**, importe o repositório e, se a pasta `pbl8/webapp` não estiver na raiz do repositório, informe-a em **Root Directory**. A Vercel detecta Next.js sozinha (comando de build `npm run build`, sem variáveis de ambiente). Depois disso, cada push na branch principal gera um novo deploy, e cada pull request ganha uma URL de pré-visualização. O deploy real não foi feito neste trabalho, por falta de credenciais; foi verificado apenas que `npm run build` termina sem erros.
 
 ## Limitações
 
