@@ -104,6 +104,24 @@ export function newCase(): FrameworkCase {
   };
 }
 
+/** Remove um caso e guarda a posição, para permitir desfazer. */
+export function removeCase(
+  cases: FrameworkCase[],
+  id: string,
+): { next: FrameworkCase[]; removed: FrameworkCase | null; index: number } {
+  const index = cases.findIndex((c) => c.id === id);
+  if (index < 0) return { next: cases, removed: null, index: -1 };
+  return { next: cases.filter((c) => c.id !== id), removed: cases[index], index };
+}
+
+/** Devolve o caso removido à posição original, sem duplicar. */
+export function restoreCase(cases: FrameworkCase[], removed: FrameworkCase, index: number): FrameworkCase[] {
+  if (cases.some((c) => c.id === removed.id)) return cases;
+  const next = [...cases];
+  next.splice(Math.min(Math.max(index, 0), next.length), 0, removed);
+  return next;
+}
+
 /** Cópia de um caso com novos ids de caso (os ids de indicadores/barreiras são preservados). */
 export function duplicateCase(c: FrameworkCase, suffix = ""): FrameworkCase {
   const now = new Date().toISOString();

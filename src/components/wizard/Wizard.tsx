@@ -13,6 +13,7 @@ import { StepBarriers } from "./StepBarriers";
 import { StepResult } from "./StepResult";
 import { StepDecision } from "./StepDecision";
 import { PrintReport } from "./PrintReport";
+import { stepPendingLabel } from "@/lib/wizard-status";
 
 export interface StepProps {
   c: FrameworkCase;
@@ -88,9 +89,9 @@ export function Wizard({ c, update, onClose }: { c: FrameworkCase; update: StepP
                   </span>
                   <span>
                     {s.title}
-                    {pendingCount[i] > 0 && i !== 3 && (
+                    {stepPendingLabel(s.key, pendingCount[i]) && (
                       <span className={"block text-xs font-normal text-muted-foreground"}>
-                        {pendingCount[i]} pendência(s)
+                        {stepPendingLabel(s.key, pendingCount[i])}
                       </span>
                     )}
                   </span>

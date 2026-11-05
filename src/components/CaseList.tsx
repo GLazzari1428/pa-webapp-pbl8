@@ -1,14 +1,14 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Copy, Download, FilePlus2, FolderOpen, Trash2, Upload } from "lucide-react";
+import { Copy, Download, FilePlus2, FolderOpen, Trash2, Undo2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EXAMPLE_CASES } from "@/lib/data/examples";
 import { evaluateCase } from "@/lib/engine/engine";
 import { latestDecision } from "@/lib/engine/decisions";
 import type { FrameworkCase } from "@/lib/engine/types";
-import { downloadJson, duplicateCase, isCase, newCase, slugify, uid } from "@/lib/storage";
+import { downloadJson, duplicateCase, isCase, newCase, removeCase, restoreCase, slugify, uid } from "@/lib/storage";
 import { RecBadge } from "./wizard/RecBadge";
 
 export function CaseList({
@@ -22,6 +22,22 @@ export function CaseList({
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState("");
+  const [undo, setUndo] = useState<{ removed: FrameworkCase; index: number } | null>(null);
+
+  const remove = (id: string) => {
+    const r = removeCase(cases, id);
+    if (!r.removed) return;
+    onChange(r.next);
+    setUndo({ removed: r.removed, index: r.index });
+    setMessage(`Caso "${r.removed.config.name || "sem nome"}" excluído.`);
+  };
+
+  const undoRemove = () => {
+    if (!undo) return;
+    onChange(restoreCase(cases, undo.removed, undo.index));
+    setMessage(`Caso "${undo.removed.config.name || "sem nome"}" restaurado.`);
+    setUndo(null);
+  };
 
   const create = () => {
     const c = newCase();
@@ -33,6 +49,7 @@ export function CaseList({
     const c = { ...duplicateCase(ex), id: uid() };
     onChange([...cases, c]);
     setMessage(`Exemplo "${ex.config.name}" adicionado.`);
+    setUndo(null);
   };
 
   const importFile = async (file: File) => {
@@ -43,6 +60,7 @@ export function CaseList({
       const imported = cases.some((x) => x.id === c.id) ? { ...c, id: uid() } : c;
       onChange([...cases, imported]);
       setMessage(`Caso "${c.config.name || "sem nome"}" importado.`);
+      setUndo(null);
     } catch {
       setMessage("Não foi possível importar: o arquivo não é um caso exportado por esta ferramenta.");
     }
@@ -77,9 +95,14 @@ export function CaseList({
             />
           </div>
         </div>
-        <p role="status" aria-live="polite" className="text-sm">
-          {message}
-        </p>
+        <div role="status" aria-live="polite" className="flex flex-wrap items-center gap-2 text-sm">
+          <span>{message}</span>
+          {undo && (
+            <Button size="sm" variant="outline" onClick={undoRemove}>
+              <Undo2 aria-hidden="true" /> Desfazer
+            </Button>
+          )}
+        </div>
         {cases.length === 0 ? (
           <p className="text-muted-foreground">Nenhum caso salvo ainda. Crie um novo caso ou carregue um dos exemplos abaixo.</p>
         ) : (
@@ -111,10 +134,7 @@ export function CaseList({
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => {
-                        if (window.confirm(`Excluir o caso "${c.config.name || "sem nome"}"? Esta ação não pode ser desfeita.`))
-                          onChange(cases.filter((x) => x.id !== c.id));
-                      }}
+                      onClick={() => remove(c.id)}
                     >
                       <Trash2 aria-hidden="true" /> Excluir
                     </Button>
