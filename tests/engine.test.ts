@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   evaluateCase,
   normalizeIndicator,
+  isWorseThanBaseline,
   validateBarriers,
   effectiveBarrierStatus,
 } from "../src/lib/engine/engine";
@@ -12,6 +13,13 @@ import { isDecisionFrozen, reopenDecision, saveDecision, EMPTY_DRAFT } from "../
 
 const TOL = 0.0005;
 const clone = (c: FrameworkCase): FrameworkCase => structuredClone(c);
+
+describe("Rótulos dos exemplos", () => {
+  it("o Conectahit não se descreve como simulado, porque seus dados são de referência", () => {
+    expect(CONECTAHIT.config.dataType).toBe("referencia");
+    expect(CONECTAHIT.config.period).not.toMatch(/simulad/i);
+  });
+});
 
 describe("Tabela 2 do artigo: os três casos", () => {
   it("Caso A: S = 0,656, faixa Pivotar, recomendação Pivotar, fronteira, instável", () => {
@@ -69,6 +77,14 @@ describe("Normalização", () => {
   it("trunca em [0,1]", () => {
     expect(normalizeIndicator({ ...base, observed: 30 })).toBe(0);
     expect(normalizeIndicator({ ...base, observed: 5 })).toBe(1);
+  });
+  it("avisa quando o valor observado é pior que a linha de base", () => {
+    expect(isWorseThanBaseline({ ...base, observed: 30 })).toBe(true);
+    expect(isWorseThanBaseline({ ...base, observed: 25 })).toBe(false);
+    expect(isWorseThanBaseline({ ...base, observed: 11 })).toBe(false);
+    expect(isWorseThanBaseline({ ...base, direction: "maior", baseline: 70, target: 90, observed: 60 })).toBe(true);
+    expect(isWorseThanBaseline({ ...base, observed: null })).toBe(false);
+    expect(isWorseThanBaseline({ ...base, baseline: 1, target: 1, observed: 5 })).toBe(false);
   });
   it("binário quando base = meta", () => {
     expect(normalizeIndicator({ ...base, baseline: 1, target: 1, binaryMet: true })).toBe(1);

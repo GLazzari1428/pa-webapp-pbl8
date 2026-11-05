@@ -4,7 +4,7 @@ import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NumberField, SelectField, TextField } from "@/components/form";
 import { HELP } from "@/lib/help";
-import { fmt, isBinary } from "@/lib/engine/engine";
+import { fmt, isBinary, isWorseThanBaseline } from "@/lib/engine/engine";
 import { DIMENSIONS, DIMENSION_LABELS, MAX_INDICATORS, type Indicator } from "@/lib/engine/types";
 import { UNIT_OPTIONS, unitSuffix } from "@/lib/engine/units";
 import { newIndicator } from "@/lib/storage";
@@ -152,6 +152,11 @@ export function StepIndicators({ c, update, ev }: StepProps) {
                     </span>
                   )}
                 </p>
+                {res?.available && isWorseThanBaseline(ind) && (
+                  <p className="mt-2 text-sm text-pivotar" role="status">
+                    O valor observado está pior que a linha de base. A nota fica em 0,000 e o indicador continua no cálculo. Confira se o valor e a direção estão corretos.
+                  </p>
+                )}
               </fieldset>
             </li>
           );

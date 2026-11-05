@@ -112,7 +112,7 @@ export const CONECTAHIT: FrameworkCase = {
     context:
       "Plataforma Marketplace + SaaS de licenciamento musical para usos audiovisuais e comerciais. Parte assistida por IA (enriquecimento de metadados).",
     dataType: "referencia",
-    period: "Primeiros 3 meses de operação do MVP (simulado)",
+    period: "Primeiros 3 meses de operação do MVP",
     owners: "Liderança de produto, operação de licenciamento, TI/segurança e jurídico",
     hypothesis: {
       text: "Reduzir o tempo de liberação de uma licença de sincronização de 21 para 3 dias, sem piorar a segurança jurídica nem elevar o custo operacional por licença.",

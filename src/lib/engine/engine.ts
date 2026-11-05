@@ -161,6 +161,17 @@ export function normalizeIndicator(ind: Indicator): number | null {
   return clamp01((b - v) / (b - g));
 }
 
+/**
+ * Verdadeiro quando o valor observado é pior que a linha de base. Nesse caso
+ * a nota normalizada é truncada em 0, e a tela precisa avisar.
+ */
+export function isWorseThanBaseline(ind: Indicator): boolean {
+  const { baseline: b, target: g, observed: v } = ind;
+  if (b === null || g === null || v === null) return false;
+  if (Math.abs(b - g) < EPS) return false;
+  return ind.direction === "maior" ? v < b : v > b;
+}
+
 export interface IndicatorResult {
   id: string;
   dimension: DimensionId;

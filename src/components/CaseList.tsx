@@ -131,7 +131,7 @@ export function CaseList({
           Exemplos do artigo (Tabela 2)
         </h2>
         <p className="text-sm text-muted-foreground">
-          Os três casos avaliados no artigo, com dados simulados ou de referência. Carregar cria uma cópia editável.
+          Os três casos do artigo: um com dados simulados (Caso A) e dois com valores de referência. Carregar cria uma cópia editável.
         </p>
         <ul className="divide-y rounded-md bg-card shadow-border">
           {EXAMPLE_CASES.map((ex) => (
